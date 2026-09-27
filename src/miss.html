@@ -327,17 +327,17 @@
           <div class="time-note" id="homeDate">--</div>
         </div>
         <div class="time-card">
-          <div class="time-city">milan</div>
-          <div class="time-value" id="milanTime">--:--</div>
-          <div class="time-note" id="milanDate">--</div>
+          <div class="time-city">trento</div>
+          <div class="time-value" id="trentoTime">--:--</div>
+          <div class="time-note" id="trentoDate">--</div>
         </div>
       </div>
       <div class="same-sky" id="skyMsg">✧ same sky, always ✧</div>
 
       <div class="distance">
         <div class="distance-label">between us</div>
-        <div class="distance-num">≈ 9,050 km</div>
-        <div class="distance-note">Hanoi ← 12 hr flight → Milan</div>
+        <div class="distance-num">≈ 9,300 km</div>
+        <div class="distance-note">Ho Chi Minh ← 13 hr flight → Trento</div>
         <div class="distance-map">
           <span class="dot dot-l"></span>
           <span class="label label-l">you</span>
@@ -383,15 +383,15 @@
         try {
           document.getElementById("homeTime").textContent = now.toLocaleTimeString("en-GB", { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit" });
           document.getElementById("homeDate").textContent = now.toLocaleDateString("en-US", { timeZone: "Asia/Ho_Chi_Minh", weekday: "short", month: "short", day: "numeric" });
-          document.getElementById("milanTime").textContent = now.toLocaleTimeString("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", minute: "2-digit" });
-          document.getElementById("milanDate").textContent = now.toLocaleDateString("en-US", { timeZone: "Europe/Rome", weekday: "short", month: "short", day: "numeric" });
+          document.getElementById("trentoTime").textContent = now.toLocaleTimeString("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", minute: "2-digit" });
+          document.getElementById("trentoDate").textContent = now.toLocaleDateString("en-US", { timeZone: "Europe/Rome", weekday: "short", month: "short", day: "numeric" });
           // sky message
-          const hourMilan = parseInt(new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", hour12: false }));
+          const hourTrento = parseInt(new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", hour12: false }));
           const hourHome = parseInt(new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", hour12: false }));
           let msg = "✧ same sky, always ✧";
-          if (hourMilan >= 22 || hourMilan < 6) msg = "you might be sleeping — dream of me";
+          if (hourTrento >= 22 || hourTrento < 6) msg = "you might be sleeping — dream of me";
           else if (hourHome >= 22 || hourHome < 6) msg = "I might be sleeping — I dream of you";
-          else if (hourMilan < 12 && hourHome > 12) msg = "your morning, my afternoon — same day, apart";
+          else if (hourTrento < 12 && hourHome > 12) msg = "your morning, my afternoon — same day, apart";
           document.getElementById("skyMsg").textContent = msg;
         } catch (e) {}
       }

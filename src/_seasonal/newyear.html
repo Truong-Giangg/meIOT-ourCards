@@ -286,9 +286,9 @@
       </div>
 
       <div class="kiss-card">
-        <div class="kiss-title">🥂 midnight in Milan</div>
+        <div class="kiss-title">🥂 midnight in Trento</div>
         <div class="kiss-sub">where you are, right now</div>
-        <div class="kiss-clock" id="milanClock">--:--:--</div>
+        <div class="kiss-clock" id="trentoClock">--:--:--</div>
         <div class="kiss-msg">Wherever midnight finds you, save one kiss for me. I'll send one back at midnight my time. ♡</div>
       </div>
 
@@ -322,15 +322,15 @@
       tick();
       setInterval(tick, 1000);
 
-      // ---------- Milan clock ----------
-      function milanTick() {
+      // ---------- Trento clock ----------
+      function trentoTick() {
         try {
           const s = new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/Rome" });
-          document.getElementById("milanClock").textContent = s;
+          document.getElementById("trentoClock").textContent = s;
         } catch { /* fallback */ }
       }
-      milanTick();
-      setInterval(milanTick, 1000);
+      trentoTick();
+      setInterval(trentoTick, 1000);
 
       // ---------- fireworks canvas ----------
       const canvas = document.getElementById("fx");

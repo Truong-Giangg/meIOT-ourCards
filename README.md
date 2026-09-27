@@ -6,7 +6,7 @@ A collection of small, personal, interactive web pages made for my girlfriend. O
       ♡           ✧             ♡
    ┌─────────────────────────────────┐
    │   for her, from home            │
-   │   Hanoi ✈ Milan  ·  2026–2028   │
+   │   Ho Chi Minh ✈ Trento · 2026–2028│
    │   ♡  our little cat Núp         │
    └─────────────────────────────────┘
 ```
@@ -24,10 +24,10 @@ Live at `https://meiot.site/*`
 | 3 | [`/nup.html`](https://meiot.site/nup.html) | Our cat Núp — greeting by hour of day, tappable Núp with soft purr, mood chips, daily care schedule with local persistence, vet-visit countdown, diary log |
 | 4 | [`/fiting.html`](https://meiot.site/fiting.html) | Encouragement during her Master's abroad — live countdown to graduation (3 Sep 2028), journey progress bar with plane, rotating quotes in EN + IT, milestone checklist, daily "I did my best" streak, letter from home |
 | 5 | [`/christmas.html`](https://meiot.site/christmas.html) | Christmas — animated snowfall canvas, clickable tree lights, gift box that opens to reveal a message, procedural bell tones + crackling fire, wish list |
-| 6 | [`/newyear.html`](https://meiot.site/newyear.html) | New Year — countdown to midnight, canvas fireworks with sound, resolutions list, live Milan clock so she knows when midnight is where she is |
+| 6 | [`/newyear.html`](https://meiot.site/newyear.html) | New Year — countdown to midnight, canvas fireworks with sound, resolutions list, live Trento clock so she knows when midnight is where she is |
 | 7 | [`/valentine.html`](https://meiot.site/valentine.html) | Valentine's — floating hearts, days-together counter, 30 rotating "reasons I love you", real finger-drag scratch card, permanent letter |
 | 8 | [`/halloween.html`](https://meiot.site/halloween.html) | Halloween — carve your own jack-o-lantern, toggle candle glow, happy/spooky mouth, tap-to-open door with random treat message, costume picker, rotating dad jokes |
-| 9 | [`/miss.html`](https://meiot.site/miss.html) | I miss you — pulsing moon, live Hanoi + Milan clocks with context messages, distance visualization, auto-rotating memories, mutual love letters |
+| 9 | [`/miss.html`](https://meiot.site/miss.html) | I miss you — pulsing moon, live Ho Chi Minh + Trento clocks with context messages, distance visualization, auto-rotating memories, mutual love letters |
 | 10 | [`/women.html`](https://meiot.site/women.html) | International Women's Day — falling flower petals, blooming SVG bouquet she can add to, 12 quality-word carousel, verse card, wishes |
 | 11 | [`/game.html`](https://meiot.site/game.html) | Mini games — memory match, catch falling hearts (drag basket, avoid rocks), rock-paper-scissors first-to-5, guess a personal word |
 
@@ -212,4 +212,4 @@ The nginx config serves any `*.html` in `dist/` automatically, no config changes
 - Original birthday card template based on [`AnshumanMahato/Happy-Birthday-Card`](https://github.com/AnshumanMahato/Happy-Birthday-Card)
 - Everything else, hand-built for her
 
-Made with love, from home to Milan. ♡
+Made with love, from home to Trento. ♡
