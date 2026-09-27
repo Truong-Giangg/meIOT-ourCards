@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#fce8ea" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Happy Women's Day</title>
+    <meta name="description" content="For the strongest, softest, kindest woman I know." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,1,300;9..144,0,500;9..144,1,500&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg1: #fdf5f6;
+        --bg2: #fce8ea;
+        --bg3: #f8d6dc;
+        --rose: #d67285;
+        --rose-2: #e88fa0;
+        --pink: #f5b4c0;
+        --gold: #d4a24c;
+        --leaf: #7a9e6e;
+        --ink: #4a2836;
+        --ink-dim: #8a6772;
+        --cream: #fff8f0;
+      }
+      html, body { min-height: 100dvh; overflow-x: hidden; }
+      body {
+        font-family: "Quicksand", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(700px 500px at 90% 5%, rgba(214,114,133,0.15), transparent),
+          radial-gradient(600px 500px at 10% 100%, rgba(212,162,76,0.10), transparent),
+          linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg3));
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        position: relative;
+      }
+      .fx-petals { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+      .petal {
+        position: absolute; top: -20px;
+        font-size: 1rem; opacity: 0.5;
+        animation: fall linear infinite;
+      }
+      @keyframes fall {
+        to { transform: translate(30px, calc(100vh + 40px)) rotate(360deg); }
+      }
+
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 2; }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--ink-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: rgba(255,255,255,0.6); border: 1px solid rgba(214,114,133,0.15);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; color: var(--rose);
+        font-style: italic; font-size: 1rem;
+      }
+
+      /* Hero */
+      .hero {
+        text-align: center;
+        padding: 24px 0 8px;
+      }
+      .hero .h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2rem, 8vw, 3rem);
+        font-weight: 400; line-height: 1.15;
+      }
+      .hero .h1 em {
+        font-style: italic;
+        color: var(--rose);
+      }
+      .hero .h2 {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        color: var(--ink-dim);
+        margin-top: 8px; font-size: 1rem;
+      }
+      .date-badge {
+        display: inline-block;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(214,114,133,0.2);
+        color: var(--rose);
+        padding: 4px 14px; border-radius: 999px;
+        font-size: 0.75rem; letter-spacing: 0.25em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      /* Bouquet */
+      .bouquet-card {
+        background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,248,240,0.5));
+        border: 1px solid rgba(214,114,133,0.15);
+        border-radius: 28px;
+        padding: 20px;
+        margin-bottom: 16px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(214,114,133,0.08);
+      }
+      .bouquet-scene {
+        width: 260px; height: 280px;
+        margin: 0 auto;
+      }
+      .bouquet-scene svg { width: 100%; height: 100%; }
+      .bloom {
+        transform-origin: center;
+        transform-box: fill-box;
+        animation: bloomIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      @keyframes bloomIn {
+        from { transform: scale(0); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+      .bouquet-tap {
+        color: var(--ink-dim); font-size: 0.9rem;
+        margin-top: 8px;
+      }
+
+      /* Section */
+      .section-title {
+        font-family: "Fraunces", serif; font-size: 1.15rem;
+        margin: 24px 4px 12px;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      /* Qualities */
+      .qualities-card {
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(214,114,133,0.15);
+        border-radius: 28px;
+        padding: 24px;
+        margin-bottom: 16px;
+        text-align: center;
+        min-height: 200px;
+        display: flex; flex-direction: column; justify-content: center;
+        backdrop-filter: blur(10px);
+      }
+      .quality-icon { font-size: 2.4rem; margin-bottom: 12px; }
+      .quality-word {
+        font-family: "Fraunces", serif;
+        font-size: 2rem; font-style: italic;
+        color: var(--rose); margin-bottom: 8px;
+      }
+      .quality-desc {
+        color: var(--ink-dim); font-size: 0.95rem;
+        line-height: 1.5; max-width: 30ch; margin: 0 auto;
+      }
+      .quality-nav {
+        display: flex; justify-content: center; gap: 12px;
+        margin-top: 20px;
+      }
+      .quality-nav button {
+        background: rgba(214,114,133,0.1);
+        border: 1px solid rgba(214,114,133,0.2);
+        color: var(--rose);
+        width: 44px; height: 44px; border-radius: 50%;
+        cursor: pointer; font-size: 1.2rem;
+      }
+      .quality-nav .primary {
+        background: var(--rose); color: #fff;
+        border-color: var(--rose);
+        box-shadow: 0 6px 16px rgba(214,114,133,0.35);
+      }
+
+      /* Verse card */
+      .verse-card {
+        background: linear-gradient(135deg, rgba(214,114,133,0.08), rgba(212,162,76,0.06));
+        border: 1px solid rgba(214,114,133,0.2);
+        border-radius: 28px;
+        padding: 28px 22px;
+        margin-bottom: 16px;
+        text-align: center;
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--ink);
+      }
+      .verse-card .sig {
+        display: block; margin-top: 14px;
+        color: var(--rose); font-size: 0.9rem; font-style: italic;
+      }
+
+      /* Wishes for her */
+      .wish-card {
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(214,114,133,0.15);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+      .wish-title { font-family: "Fraunces", serif; font-size: 1.1rem; margin-bottom: 4px; }
+      .wish-sub { color: var(--ink-dim); font-size: 0.85rem; margin-bottom: 14px; }
+      .wish-list {
+        list-style: none;
+      }
+      .wish-list li {
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(214,114,133,0.1);
+        border-radius: 14px;
+        display: flex; align-items: center; gap: 10px;
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+      }
+      .wish-list .flower { font-size: 1.1rem; }
+
+      footer {
+        text-align: center; color: var(--ink-dim);
+        font-size: 0.8rem; margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fx-petals" id="petals" aria-hidden="true"></div>
+
+    <div class="container">
+      <header>
+        <a href="/" class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">◇ per lei ◇</div>
+      </header>
+
+      <section class="hero">
+        <div class="date-badge">March 8</div>
+        <div class="h1">Happy <em>Women's</em> Day</div>
+        <div class="h2">for the strongest, softest one I know</div>
+      </section>
+
+      <div class="bouquet-card">
+        <div class="bouquet-scene">
+          <svg id="bouquet" viewBox="0 0 260 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- wrapping paper -->
+            <path d="M100 200 L60 275 L200 275 L160 200 Z" fill="#f5b4c0" stroke="#d67285" stroke-width="1"/>
+            <path d="M100 200 L60 275 L200 275 L160 200 Z" fill="none" stroke="#e88fa0" stroke-width="1" stroke-dasharray="4 3"/>
+            <!-- ribbon -->
+            <ellipse cx="130" cy="220" rx="35" ry="6" fill="#d67285"/>
+            <path d="M110 218 Q115 205 105 200 Q110 215 118 220" fill="#d67285"/>
+            <path d="M150 218 Q145 205 155 200 Q150 215 142 220" fill="#d67285"/>
+            <!-- stems -->
+            <g stroke="#7a9e6e" stroke-width="2" fill="none">
+              <path d="M130 200 L130 130"/>
+              <path d="M115 205 L100 130"/>
+              <path d="M145 205 L160 130"/>
+              <path d="M105 210 L80 145"/>
+              <path d="M155 210 L180 145"/>
+              <path d="M130 195 L130 90"/>
+              <path d="M120 200 L110 100"/>
+              <path d="M140 200 L150 100"/>
+            </g>
+            <!-- leaves -->
+            <ellipse class="bloom" cx="115" cy="165" rx="10" ry="6" fill="#7a9e6e" style="animation-delay:0.1s" transform="rotate(-30 115 165)"/>
+            <ellipse class="bloom" cx="145" cy="165" rx="10" ry="6" fill="#7a9e6e" style="animation-delay:0.15s" transform="rotate(30 145 165)"/>
+            <ellipse class="bloom" cx="100" cy="150" rx="8" ry="5" fill="#a3c497" style="animation-delay:0.2s" transform="rotate(-40 100 150)"/>
+            <ellipse class="bloom" cx="160" cy="150" rx="8" ry="5" fill="#a3c497" style="animation-delay:0.2s" transform="rotate(40 160 150)"/>
+
+            <!-- flowers: big roses at top, smaller ones around -->
+            <g class="bloom" style="animation-delay: 0.3s">
+              <circle cx="130" cy="90" r="22" fill="#e88fa0"/>
+              <circle cx="130" cy="90" r="14" fill="#d67285"/>
+              <circle cx="130" cy="90" r="6" fill="#a04a5c"/>
+              <path d="M130 68 Q140 80 130 90 Q120 80 130 68" fill="#ffb0be" opacity="0.7"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.45s">
+              <circle cx="100" cy="115" r="18" fill="#f5b4c0"/>
+              <circle cx="100" cy="115" r="11" fill="#e88fa0"/>
+              <circle cx="100" cy="115" r="5" fill="#a04a5c"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.5s">
+              <circle cx="160" cy="115" r="18" fill="#d67285"/>
+              <circle cx="160" cy="115" r="11" fill="#a04a5c"/>
+              <circle cx="160" cy="115" r="5" fill="#7a2836"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.6s">
+              <circle cx="80" cy="145" r="14" fill="#f5b4c0"/>
+              <circle cx="80" cy="145" r="8" fill="#e88fa0"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.65s">
+              <circle cx="180" cy="145" r="14" fill="#d4a24c"/>
+              <circle cx="180" cy="145" r="8" fill="#b0842a"/>
+              <circle cx="180" cy="145" r="3" fill="#7a5a20"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.75s">
+              <circle cx="130" cy="130" r="14" fill="#fff2ea"/>
+              <circle cx="130" cy="130" r="8" fill="#f5b4c0"/>
+              <circle cx="130" cy="130" r="3" fill="#d4a24c"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.85s">
+              <circle cx="115" cy="145" r="10" fill="#d4a24c"/>
+              <circle cx="115" cy="145" r="5" fill="#a07830"/>
+            </g>
+            <g class="bloom" style="animation-delay: 0.9s">
+              <circle cx="145" cy="145" r="10" fill="#e88fa0"/>
+              <circle cx="145" cy="145" r="5" fill="#d67285"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bouquet-tap">tap for more blooms 🌸</div>
+      </div>
+
+      <div class="section-title">✨ what you are, to me</div>
+      <div class="qualities-card">
+        <div class="quality-icon" id="qEmoji">🌸</div>
+        <div class="quality-word" id="qWord">brave</div>
+        <div class="quality-desc" id="qDesc">You crossed a continent to build our future. That's not a decision — that's a whole spirit.</div>
+        <div class="quality-nav">
+          <button id="qPrev" aria-label="Previous">‹</button>
+          <button class="primary" id="qNext" aria-label="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-5.5-9-10a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 10-9 10z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="section-title">💐 a little verse</div>
+      <div class="verse-card">
+        You are made of soft mornings and stubborn dreams,<br/>
+        of quiet strength that mountains would envy,<br/>
+        of a laugh that turns kitchens into homes.<br/><br/>
+        Not one day of the year — every day, every year,<br/>
+        the world is better because you're in it.<br/>
+        <span class="sig">— con tanto amore, per te ♡</span>
+      </div>
+
+      <div class="section-title">🌷 wishes for you this year</div>
+      <div class="wish-card">
+        <div class="wish-title">May you always have</div>
+        <div class="wish-sub">the things you don't ask for but deserve most</div>
+        <ul class="wish-list">
+          <li><span class="flower">🌸</span> soft mornings and slow coffee</li>
+          <li><span class="flower">🌼</span> people who see you clearly and stay</li>
+          <li><span class="flower">🌷</span> the courage to rest without guilt</li>
+          <li><span class="flower">🌹</span> days that feel like your own, not borrowed</li>
+          <li><span class="flower">🪷</span> laughter, real and loud and often</li>
+          <li><span class="flower">🌻</span> a body that carries you kindly</li>
+          <li><span class="flower">💐</span> the certainty that you are loved, right here</li>
+        </ul>
+      </div>
+
+      <footer>from home, for you · today and every day 🌸</footer>
+    </div>
+
+    <script type="module">
+      // ---------- petals ----------
+      const petalContainer = document.getElementById("petals");
+      const petalEmojis = ["🌸", "🌺", "🌷", "🌹", "🌼", "💮"];
+      function makePetal() {
+        const p = document.createElement("div");
+        p.className = "petal";
+        p.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+        p.style.left = Math.random() * 100 + "%";
+        p.style.animationDuration = (10 + Math.random() * 12) + "s";
+        p.style.animationDelay = -Math.random() * 12 + "s";
+        p.style.fontSize = (0.7 + Math.random() * 0.7) + "rem";
+        petalContainer.appendChild(p);
+      }
+      for (let i = 0; i < 12; i++) makePetal();
+
+      // ---------- bouquet more blooms ----------
+      const bouquet = document.getElementById("bouquet");
+      bouquet.addEventListener("click", () => {
+        // add a new small bloom at random position within bouquet area
+        const ns = "http://www.w3.org/2000/svg";
+        const g = document.createElementNS(ns, "g");
+        g.setAttribute("class", "bloom");
+        const cx = 80 + Math.random() * 100;
+        const cy = 90 + Math.random() * 70;
+        const colors = [
+          ["#e88fa0", "#d67285"],
+          ["#f5b4c0", "#e88fa0"],
+          ["#d4a24c", "#a07830"],
+          ["#fff2ea", "#f5b4c0"],
+          ["#d67285", "#a04a5c"],
+        ];
+        const [c1, c2] = colors[Math.floor(Math.random() * colors.length)];
+        const r1 = 8 + Math.random() * 8;
+        const c = document.createElementNS(ns, "circle");
+        c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", r1); c.setAttribute("fill", c1);
+        const c3 = document.createElementNS(ns, "circle");
+        c3.setAttribute("cx", cx); c3.setAttribute("cy", cy); c3.setAttribute("r", r1 * 0.55); c3.setAttribute("fill", c2);
+        g.appendChild(c); g.appendChild(c3);
+        bouquet.appendChild(g);
+      });
+
+      // ---------- qualities carousel ----------
+      const qualities = [
+        { i: "🦁", w: "brave", d: "You crossed a continent to build our future. That's not a decision — that's a whole spirit." },
+        { i: "🌸", w: "gentle", d: "Your softness with Núp, with strangers, with me. Nothing wasted." },
+        { i: "🔥", w: "fierce", d: "When you love, you love the whole way. When you fight for something, watch out world." },
+        { i: "🌊", w: "patient", d: "Two years abroad, one exam at a time. Slow, steady, unstoppable." },
+        { i: "☕", w: "thoughtful", d: "The way you remember birthdays and how I take my coffee. Small things build cathedrals." },
+        { i: "🌿", w: "grounded", d: "In storms you're the tree, and I've held that trunk more than once." },
+        { i: "✨", w: "bright", d: "You are the light people warm their hands on without realizing." },
+        { i: "🎨", w: "creative", d: "You see the world sideways and make it more beautiful for the rest of us." },
+        { i: "💝", w: "loving", d: "You love the way waves come home — every time, without fail." },
+        { i: "🏔", w: "strong", d: "You've carried heavier things than most people know. And you're still here, still soft." },
+        { i: "🌙", w: "wise", d: "Old-soul wisdom in your voice at 3 AM. I keep learning." },
+        { i: "🌻", w: "honest", d: "You tell hard truths kindly. That's rarer than diamonds." },
+      ];
+      let qi = 0;
+      function showQ(i) {
+        qi = (i + qualities.length) % qualities.length;
+        const q = qualities[qi];
+        [
+          ["qEmoji", q.i],
+          ["qWord", q.w],
+          ["qDesc", q.d],
+        ].forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: "forwards" }).onfinish = () => {
+            el.textContent = val;
+            el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300, fill: "forwards" });
+          };
+        });
+      }
+      document.getElementById("qPrev").addEventListener("click", () => showQ(qi - 1));
+      document.getElementById("qNext").addEventListener("click", () => showQ(qi + 1));
+    </script>
+  </body>
+</html>

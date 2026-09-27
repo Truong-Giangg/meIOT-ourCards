@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#1e1338" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Games · a break for us</title>
+    <meta name="description" content="Tiny games, big smiles." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg1: #14092e;
+        --bg2: #1e1338;
+        --bg3: #2c1f4d;
+        --purple: #b599ff;
+        --pink: #ff9ac8;
+        --gold: #f5c96b;
+        --teal: #7ce0d0;
+        --text: #f4f0ff;
+        --text-dim: #a89fc9;
+        --panel: rgba(255,255,255,0.06);
+        --panel-line: rgba(255,255,255,0.12);
+      }
+      html, body { min-height: 100dvh; overflow-x: hidden; }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(700px 400px at 10% 0%, rgba(181,153,255,0.15), transparent),
+          radial-gradient(700px 400px at 90% 100%, rgba(255,154,200,0.12), transparent),
+          linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg3));
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        overflow-x: hidden;
+      }
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: var(--panel); border: 1px solid var(--panel-line);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; color: var(--pink);
+        font-size: 1rem; letter-spacing: 0.1em;
+      }
+
+      .hero {
+        text-align: center; padding: 12px 0;
+      }
+      .hero h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.8rem, 6vw, 2.4rem);
+        font-weight: 400;
+      }
+      .hero h1 em { color: var(--pink); font-style: italic; }
+      .hero p { color: var(--text-dim); font-size: 0.95rem; margin-top: 4px; }
+
+      /* Game menu */
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 20px 0 16px;
+      }
+      .game-card {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 20px;
+        padding: 18px;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.15s, background 0.2s, border-color 0.2s;
+        color: inherit;
+      }
+      .game-card:active { transform: scale(0.97); }
+      .game-card.active {
+        background: linear-gradient(135deg, rgba(181,153,255,0.15), rgba(255,154,200,0.1));
+        border-color: var(--purple);
+      }
+      .game-emoji { font-size: 2rem; margin-bottom: 8px; }
+      .game-name { font-family: "Fraunces", serif; font-size: 1.1rem; }
+      .game-desc { color: var(--text-dim); font-size: 0.8rem; margin-top: 4px; }
+
+      /* Game surface */
+      .stage {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 24px;
+        padding: 20px;
+        min-height: 380px;
+        margin-bottom: 12px;
+      }
+      .stage-head {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 14px;
+      }
+      .stage-title { font-family: "Fraunces", serif; font-size: 1.15rem; }
+      .stage-score { color: var(--gold); font-weight: 600; }
+
+      /* Memory game */
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .mem {
+        aspect-ratio: 1;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem;
+        transition: transform 0.3s;
+        user-select: none;
+        border: none;
+        color: white;
+      }
+      .mem.flipped {
+        background: rgba(255,255,255,0.15);
+        transform: rotateY(180deg);
+      }
+      .mem.matched {
+        background: linear-gradient(135deg, var(--gold), var(--teal));
+        cursor: default;
+      }
+      .mem span {
+        transform: rotateY(180deg);
+        visibility: hidden;
+      }
+      .mem.flipped span, .mem.matched span { visibility: visible; }
+
+      /* Catch hearts game */
+      .catch-area {
+        position: relative;
+        width: 100%; height: 380px;
+        background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+        border-radius: 16px;
+        overflow: hidden;
+        touch-action: none;
+      }
+      .basket {
+        position: absolute; bottom: 10px;
+        width: 60px; height: 40px;
+        background: linear-gradient(135deg, var(--gold), #d4a24c);
+        border-radius: 8px 8px 30px 30px;
+        transform: translateX(-50%);
+        box-shadow: 0 4px 12px rgba(245,201,107,0.4);
+        transition: none;
+      }
+      .basket::after {
+        content: "🧺"; position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.5rem;
+      }
+      .falling {
+        position: absolute; top: -30px;
+        font-size: 1.6rem;
+        pointer-events: none;
+        user-select: none;
+      }
+      .catch-controls {
+        display: flex; gap: 8px; justify-content: center;
+        margin-top: 12px;
+      }
+      .catch-controls button {
+        background: var(--panel); border: 1px solid var(--panel-line);
+        color: var(--text); padding: 10px 20px;
+        border-radius: 999px; cursor: pointer;
+        font-family: inherit; min-height: 44px;
+      }
+      .catch-controls button.primary {
+        background: linear-gradient(135deg, var(--pink), var(--purple));
+        border-color: transparent;
+        font-weight: 600;
+      }
+
+      /* Rock paper scissors */
+      .rps {
+        text-align: center;
+      }
+      .rps-vs {
+        display: flex; align-items: center; justify-content: center;
+        gap: 20px; margin: 20px 0;
+        min-height: 100px;
+      }
+      .rps-side {
+        text-align: center; flex: 1;
+      }
+      .rps-side .lbl { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 8px; }
+      .rps-side .move { font-size: 3.5rem; }
+      .rps-mid { color: var(--pink); font-family: "Fraunces", serif; font-size: 1.5rem; }
+      .rps-picks {
+        display: flex; justify-content: center; gap: 12px;
+        margin-top: 16px;
+      }
+      .rps-pick {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        color: var(--text);
+        width: 70px; height: 70px;
+        border-radius: 20px;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: transform 0.15s;
+      }
+      .rps-pick:active { transform: scale(0.9); }
+      .rps-result {
+        font-family: "Fraunces", serif; font-style: italic;
+        color: var(--gold); font-size: 1.1rem;
+        margin-top: 16px; min-height: 1.5em;
+      }
+      .rps-score { color: var(--text-dim); font-size: 0.9rem; margin-top: 8px; }
+
+      /* Wordle-esque guess */
+      .guess-input-wrap {
+        display: flex; gap: 8px; margin-bottom: 12px;
+      }
+      .guess-input-wrap input {
+        flex: 1;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-family: inherit; font-size: 1rem;
+        outline: none;
+        min-height: 44px;
+        text-transform: lowercase;
+      }
+      .guess-input-wrap button {
+        background: var(--pink); color: var(--bg1);
+        border: none; border-radius: 12px;
+        padding: 0 18px; min-height: 44px;
+        font-family: inherit; font-weight: 600;
+        cursor: pointer;
+      }
+      .guess-hint {
+        background: rgba(0,0,0,0.2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-family: "Fraunces", serif; font-style: italic;
+        color: var(--purple);
+        margin-bottom: 12px;
+      }
+      .guess-list { list-style: none; }
+      .guess-list li {
+        padding: 8px 12px; margin-bottom: 6px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        display: flex; justify-content: space-between;
+        font-family: "Fraunces", serif;
+      }
+      .guess-list .right { color: var(--gold); }
+      .guess-list .close { color: var(--purple); }
+      .guess-list .cold { color: var(--text-dim); }
+
+      footer {
+        text-align: center; color: var(--text-dim);
+        font-size: 0.8rem; margin-top: 24px;
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: calc(24px + env(safe-area-inset-bottom));
+        left: 50%; transform: translateX(-50%) translateY(20px);
+        background: rgba(0,0,0,0.85);
+        color: #fff;
+        padding: 10px 18px; border-radius: 999px;
+        font-size: 0.9rem; opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none; z-index: 100;
+      }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href="/" class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">◆ GAMES ◆</div>
+      </header>
+
+      <section class="hero">
+        <h1>a little <em>break</em> for us</h1>
+        <p>pick a game, take five minutes ✧</p>
+      </section>
+
+      <div class="games-grid">
+        <button class="game-card active" data-game="memory">
+          <div class="game-emoji">🎴</div>
+          <div class="game-name">Memory</div>
+          <div class="game-desc">match the pairs</div>
+        </button>
+        <button class="game-card" data-game="catch">
+          <div class="game-emoji">💖</div>
+          <div class="game-name">Catch hearts</div>
+          <div class="game-desc">30 seconds, quick fingers</div>
+        </button>
+        <button class="game-card" data-game="rps">
+          <div class="game-emoji">✂️</div>
+          <div class="game-name">Rock paper</div>
+          <div class="game-desc">classic, first to 5</div>
+        </button>
+        <button class="game-card" data-game="guess">
+          <div class="game-emoji">💭</div>
+          <div class="game-name">Guess a word</div>
+          <div class="game-desc">an inside-joke word</div>
+        </button>
+      </div>
+
+      <div class="stage" id="stage"></div>
+
+      <footer>made for tired evenings and afternoon breaks ✨</footer>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+      const stage = document.getElementById("stage");
+      const toastEl = document.getElementById("toast");
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        clearTimeout(toastEl._t);
+        toastEl._t = setTimeout(() => toastEl.classList.remove("show"), 1500);
+      }
+
+      // ---------- game switcher ----------
+      const games = {
+        memory: initMemory,
+        catch: initCatch,
+        rps: initRPS,
+        guess: initGuess,
+      };
+      document.querySelectorAll(".game-card").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".game-card").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const g = btn.dataset.game;
+          stage.innerHTML = "";
+          games[g]();
+        });
+      });
+
+      // ---------- MEMORY ----------
+      function initMemory() {
+        const items = ["💖","🌸","🌙","☕","🎵","✨","🐈","🌊"];
+        const deck = [...items, ...items].sort(() => Math.random() - 0.5);
+        let flipped = [];
+        let matched = 0;
+        let moves = 0;
+
+        stage.innerHTML = `
+          <div class="stage-head">
+            <div class="stage-title">🎴 Memory match</div>
+            <div class="stage-score">moves: <span id="moves">0</span></div>
+          </div>
+          <div class="memory-grid" id="memGrid"></div>
+        `;
+        const grid = document.getElementById("memGrid");
+        deck.forEach((sym, i) => {
+          const b = document.createElement("button");
+          b.className = "mem";
+          b.dataset.sym = sym;
+          b.innerHTML = "<span>" + sym + "</span>";
+          b.addEventListener("click", () => {
+            if (b.classList.contains("flipped") || b.classList.contains("matched") || flipped.length === 2) return;
+            b.classList.add("flipped");
+            flipped.push(b);
+            if (flipped.length === 2) {
+              moves++;
+              document.getElementById("moves").textContent = moves;
+              const [a, c] = flipped;
+              if (a.dataset.sym === c.dataset.sym) {
+                setTimeout(() => {
+                  a.classList.add("matched"); c.classList.add("matched");
+                  flipped = [];
+                  matched++;
+                  if (matched === items.length) {
+                    toast("all matched in " + moves + " moves! ♡");
+                  }
+                }, 400);
+              } else {
+                setTimeout(() => {
+                  a.classList.remove("flipped"); c.classList.remove("flipped");
+                  flipped = [];
+                }, 800);
+              }
+            }
+          });
+          grid.appendChild(b);
+        });
+      }
+
+      // ---------- CATCH HEARTS ----------
+      function initCatch() {
+        stage.innerHTML = `
+          <div class="stage-head">
+            <div class="stage-title">💖 Catch hearts</div>
+            <div class="stage-score">score: <span id="score">0</span> · <span id="timer">30</span>s</div>
+          </div>
+          <div class="catch-area" id="catchArea">
+            <div class="basket" id="basket"></div>
+          </div>
+          <div class="catch-controls">
+            <button class="primary" id="catchStart">start</button>
+            <button id="catchReset">reset</button>
+          </div>
+          <div style="text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 8px;">drag anywhere to move · catch hearts, avoid rocks</div>
+        `;
+
+        const area = document.getElementById("catchArea");
+        const basket = document.getElementById("basket");
+        let score = 0, timeLeft = 30, running = false, spawner, timer, animFrame;
+        let basketX = 0.5; // 0..1
+        const fallItems = [];
+        const rect = () => area.getBoundingClientRect();
+
+        function positionBasket() {
+          const r = rect();
+          basket.style.left = (basketX * r.width) + "px";
+        }
+        positionBasket();
+        window.addEventListener("resize", positionBasket);
+
+        area.addEventListener("pointermove", (e) => {
+          const r = rect();
+          basketX = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+          positionBasket();
+        });
+        area.addEventListener("touchmove", (e) => {
+          const r = rect();
+          const t = e.touches[0];
+          basketX = Math.min(1, Math.max(0, (t.clientX - r.left) / r.width));
+          positionBasket();
+          e.preventDefault();
+        }, { passive: false });
+
+        function spawn() {
+          const r = rect();
+          const el = document.createElement("div");
+          el.className = "falling";
+          const isRock = Math.random() < 0.15;
+          el.textContent = isRock ? "🪨" : ["💖", "💝", "❤️", "💕"][Math.floor(Math.random() * 4)];
+          el.dataset.rock = isRock;
+          el.style.left = (Math.random() * (r.width - 30)) + "px";
+          el.style.top = "-30px";
+          area.appendChild(el);
+          fallItems.push({ el, x: parseFloat(el.style.left), y: -30, vy: 2 + Math.random() * 2.5 });
+        }
+
+        function loop() {
+          const r = rect();
+          for (let i = fallItems.length - 1; i >= 0; i--) {
+            const f = fallItems[i];
+            f.y += f.vy;
+            f.el.style.top = f.y + "px";
+            // basket collision
+            const basketLeft = basketX * r.width - 30;
+            const basketRight = basketX * r.width + 30;
+            if (f.y >= r.height - 50 && f.y < r.height - 20 && f.x >= basketLeft - 12 && f.x <= basketRight + 12) {
+              const rock = f.el.dataset.rock === "true";
+              if (rock) { score = Math.max(0, score - 3); toast("−3"); }
+              else { score++; }
+              document.getElementById("score").textContent = score;
+              f.el.remove();
+              fallItems.splice(i, 1);
+              continue;
+            }
+            if (f.y > r.height) {
+              f.el.remove();
+              fallItems.splice(i, 1);
+            }
+          }
+          if (running) animFrame = requestAnimationFrame(loop);
+        }
+
+        function start() {
+          if (running) return;
+          score = 0; timeLeft = 30;
+          document.getElementById("score").textContent = 0;
+          document.getElementById("timer").textContent = timeLeft;
+          area.querySelectorAll(".falling").forEach(f => f.remove());
+          fallItems.length = 0;
+          running = true;
+          spawner = setInterval(spawn, 600);
+          timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById("timer").textContent = timeLeft;
+            if (timeLeft <= 0) stop();
+          }, 1000);
+          animFrame = requestAnimationFrame(loop);
+        }
+        function stop() {
+          running = false;
+          clearInterval(spawner); clearInterval(timer);
+          cancelAnimationFrame(animFrame);
+          toast("done! " + score + " points ♡");
+        }
+        document.getElementById("catchStart").addEventListener("click", start);
+        document.getElementById("catchReset").addEventListener("click", () => { stop(); score = 0; document.getElementById("score").textContent = 0; document.getElementById("timer").textContent = 30; });
+      }
+
+      // ---------- ROCK PAPER SCISSORS ----------
+      function initRPS() {
+        stage.innerHTML = `
+          <div class="stage-head">
+            <div class="stage-title">✂️ Rock paper scissors</div>
+            <div class="stage-score">first to 5</div>
+          </div>
+          <div class="rps">
+            <div class="rps-vs">
+              <div class="rps-side">
+                <div class="lbl">you</div>
+                <div class="move" id="myMove">–</div>
+              </div>
+              <div class="rps-mid">vs</div>
+              <div class="rps-side">
+                <div class="lbl">me</div>
+                <div class="move" id="opMove">–</div>
+              </div>
+            </div>
+            <div class="rps-picks">
+              <button class="rps-pick" data-p="rock">🪨</button>
+              <button class="rps-pick" data-p="paper">📄</button>
+              <button class="rps-pick" data-p="scissors">✂️</button>
+            </div>
+            <div class="rps-result" id="rpsRes">pick your move ✨</div>
+            <div class="rps-score">you <span id="youS">0</span> · <span id="opS">0</span> me</div>
+          </div>
+        `;
+        const symbols = { rock: "🪨", paper: "📄", scissors: "✂️" };
+        const beats = { rock: "scissors", scissors: "paper", paper: "rock" };
+        let youS = 0, opS = 0;
+        document.querySelectorAll(".rps-pick").forEach((b) => {
+          b.addEventListener("click", () => {
+            const you = b.dataset.p;
+            const op = ["rock", "paper", "scissors"][Math.floor(Math.random() * 3)];
+            document.getElementById("myMove").textContent = symbols[you];
+            document.getElementById("opMove").textContent = symbols[op];
+            let res = "";
+            if (you === op) res = "tie ♡";
+            else if (beats[you] === op) { youS++; res = "you win this one!"; }
+            else { opS++; res = "I got that one!"; }
+            document.getElementById("rpsRes").textContent = res;
+            document.getElementById("youS").textContent = youS;
+            document.getElementById("opS").textContent = opS;
+            if (youS >= 5 || opS >= 5) {
+              const winMsg = youS >= 5 ? "you win the match! 🏆" : "I win — rematch? ♡";
+              document.getElementById("rpsRes").textContent = winMsg;
+              youS = 0; opS = 0;
+              setTimeout(() => {
+                document.getElementById("youS").textContent = 0;
+                document.getElementById("opS").textContent = 0;
+              }, 2000);
+            }
+          });
+        });
+      }
+
+      // ---------- GUESS THE WORD ----------
+      function initGuess() {
+        // A gentle word-guessing game with a personal hint
+        const puzzles = [
+          { hint: "the little furball we call ours", word: "nup" },
+          { hint: "where you are, this year and next", word: "milan" },
+          { hint: "our morning brew", word: "coffee" },
+          { hint: "the season we fell", word: "autumn" },
+          { hint: "what I want for us, always", word: "home" },
+          { hint: "language of your new city", word: "italian" },
+          { hint: "what your degree will be", word: "master" },
+        ];
+        const p = puzzles[Math.floor(Math.random() * puzzles.length)];
+        stage.innerHTML = `
+          <div class="stage-head">
+            <div class="stage-title">💭 Guess</div>
+            <div class="stage-score">tries left: <span id="tries">6</span></div>
+          </div>
+          <div class="guess-hint">${p.hint}</div>
+          <div class="guess-input-wrap">
+            <input id="guessIn" type="text" placeholder="type your guess..." autocomplete="off" maxlength="20" />
+            <button id="guessGo">go</button>
+          </div>
+          <ul class="guess-list" id="guessList"></ul>
+        `;
+        const input = document.getElementById("guessIn");
+        const list = document.getElementById("guessList");
+        let tries = 6;
+
+        function tryGuess() {
+          const v = input.value.trim().toLowerCase();
+          if (!v) return;
+          input.value = "";
+          const li = document.createElement("li");
+          let cls = "cold", label = "not it";
+          if (v === p.word) { cls = "right"; label = "got it! ✨"; }
+          else if (p.word.includes(v) || v.includes(p.word.slice(0, 2))) { cls = "close"; label = "warm..."; }
+          li.className = cls;
+          li.innerHTML = "<span>" + v + "</span><span>" + label + "</span>";
+          list.prepend(li);
+          if (v === p.word) {
+            toast("you got it — " + p.word + " ♡");
+            input.disabled = true;
+            return;
+          }
+          tries--;
+          document.getElementById("tries").textContent = tries;
+          if (tries <= 0) {
+            toast("the word was: " + p.word);
+            input.disabled = true;
+          }
+        }
+        document.getElementById("guessGo").addEventListener("click", tryGuess);
+        input.addEventListener("keydown", (e) => { if (e.key === "Enter") tryGuess(); });
+      }
+
+      // init default
+      initMemory();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+# Copy this to ~/.cloudflared/config.yml on the origin host.
+# Replace <TUNNEL_ID> with the ID printed by `cloudflared tunnel create hbd`.
+# Replace USER with your Linux username (giang).
+
+tunnel: <TUNNEL_ID>
+credentials-file: /home/USER/.cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  # Public website -> local nginx (forced IPv4 to avoid ::1 mismatch)
+  - hostname: meiot.site
+    service: http://127.0.0.1:80
+  # Fallback
+  - service: http_status:404

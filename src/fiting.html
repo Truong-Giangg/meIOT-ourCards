@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#1a2a4a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Fighting · you can do it</title>
+    <meta name="description" content="Every day counts. I'm here." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fighting · for her" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg1: #0e1837;
+        --bg2: #1a2a4a;
+        --bg3: #2d3a6b;
+        --gold: #e6c56e;
+        --gold-soft: #f5e0a3;
+        --rose: #e8998f;
+        --sky: #7aa9d9;
+        --text: #f4f0e6;
+        --text-dim: #a9b3d0;
+        --panel: rgba(255, 255, 255, 0.06);
+        --panel-line: rgba(255, 255, 255, 0.12);
+      }
+      html, body { min-height: 100dvh; }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1000px 500px at 90% 5%, rgba(230,197,110,0.14), transparent),
+          radial-gradient(700px 400px at 10% 85%, rgba(232,153,143,0.12), transparent),
+          linear-gradient(180deg, var(--bg1), var(--bg2) 60%, var(--bg3));
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        position: relative;
+      }
+      body::before {
+        content: "";
+        position: fixed; inset: 0;
+        background-image:
+          radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5), transparent),
+          radial-gradient(1px 1px at 60% 65%, rgba(255,255,255,0.35), transparent),
+          radial-gradient(1.5px 1.5px at 85% 20%, rgba(255,255,255,0.6), transparent),
+          radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.4), transparent);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 1; }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: var(--panel); border: 1px solid var(--panel-line);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; font-size: 1rem;
+        color: var(--gold); letter-spacing: 0.05em;
+      }
+
+      /* --- Hero countdown --- */
+      .hero {
+        text-align: center;
+        padding: 20px 0 8px;
+      }
+      .hero-eyebrow {
+        font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase;
+        color: var(--gold); margin-bottom: 12px;
+      }
+      .hero-title {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.6rem, 5.5vw, 2.4rem);
+        font-weight: 300; line-height: 1.2;
+        max-width: 20ch; margin: 0 auto 6px;
+      }
+      .hero-title em {
+        font-style: italic; color: var(--gold-soft);
+      }
+      .hero-sub {
+        color: var(--text-dim); font-size: 0.95rem;
+        margin-bottom: 24px;
+      }
+
+      .countdown {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin: 0 auto 28px;
+        max-width: 500px;
+      }
+      .cd-box {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 16px;
+        padding: 14px 6px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .cd-num {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.6rem, 6vw, 2.2rem);
+        font-weight: 500;
+        color: var(--gold-soft);
+        line-height: 1;
+      }
+      .cd-label {
+        font-size: 0.7rem; letter-spacing: 0.15em;
+        text-transform: uppercase; color: var(--text-dim);
+        margin-top: 6px;
+      }
+
+      /* --- Progress --- */
+      .journey {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 24px;
+        padding: 22px;
+        margin-bottom: 16px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .journey-head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        margin-bottom: 14px;
+      }
+      .journey-title { font-family: "Fraunces", serif; font-size: 1.15rem; }
+      .journey-pct { color: var(--gold); font-family: "Fraunces", serif; font-size: 1.4rem; }
+
+      .path {
+        position: relative;
+        height: 60px;
+        margin: 8px 0 4px;
+      }
+      .path-line {
+        position: absolute; top: 50%; left: 12px; right: 12px;
+        height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px;
+        transform: translateY(-50%);
+      }
+      .path-fill {
+        position: absolute; top: 50%; left: 12px;
+        height: 3px; background: linear-gradient(90deg, var(--rose), var(--gold));
+        border-radius: 2px; transform: translateY(-50%);
+        box-shadow: 0 0 12px rgba(230, 197, 110, 0.5);
+        transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .path-marker {
+        position: absolute; top: 50%; transform: translate(-50%, -50%);
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
+      }
+      .path-marker .dot {
+        width: 12px; height: 12px; border-radius: 50%;
+        background: var(--bg1); border: 2px solid var(--text-dim);
+      }
+      .path-marker.done .dot { background: var(--gold); border-color: var(--gold); }
+      .path-marker .lbl {
+        position: absolute; top: 20px; white-space: nowrap; font-size: 0.7rem;
+        color: var(--text-dim);
+      }
+      .plane {
+        position: absolute; top: 50%; transform: translate(-50%, -85%);
+        transition: left 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: drop-shadow(0 4px 8px rgba(230,197,110,0.4));
+      }
+      .journey-dates {
+        display: flex; justify-content: space-between;
+        font-size: 0.8rem; color: var(--text-dim);
+        margin-top: 30px;
+      }
+
+      /* --- Encouragement --- */
+      .section-title {
+        font-family: "Fraunces", serif; font-size: 1.15rem;
+        margin: 24px 4px 12px;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      .quote-card {
+        background: linear-gradient(135deg, rgba(230,197,110,0.15), rgba(232,153,143,0.1));
+        border: 1px solid rgba(230,197,110,0.3);
+        border-radius: 24px;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 12px;
+        position: relative;
+        overflow: hidden;
+      }
+      .quote-card::before {
+        content: "\201C";
+        position: absolute; top: 0; left: 16px;
+        font-family: "Fraunces", serif; font-size: 5rem;
+        color: rgba(230,197,110,0.3);
+        line-height: 1;
+      }
+      .quote-text {
+        font-family: "Fraunces", serif;
+        font-size: 1.15rem; font-weight: 300; font-style: italic;
+        line-height: 1.5;
+        color: var(--text);
+        position: relative;
+      }
+      .quote-more {
+        display: inline-flex; align-items: center; gap: 6px;
+        margin-top: 14px;
+        background: var(--panel); border: 1px solid var(--panel-line);
+        color: var(--gold-soft); font-family: inherit; font-size: 0.9rem;
+        padding: 8px 16px; border-radius: 999px; cursor: pointer;
+        min-height: 40px;
+      }
+      .quote-more:active { transform: scale(0.96); }
+
+      /* --- Milestones --- */
+      .milestone-list {
+        display: flex; flex-direction: column; gap: 10px;
+      }
+      .milestone {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 16px;
+        padding: 14px 16px;
+        display: flex; align-items: center; gap: 14px;
+        transition: transform 0.2s, border-color 0.2s;
+      }
+      .milestone.done {
+        border-color: rgba(230,197,110,0.4);
+        background: rgba(230,197,110,0.08);
+      }
+      .milestone-icon {
+        width: 40px; height: 40px; border-radius: 12px;
+        background: rgba(255,255,255,0.08);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem; flex-shrink: 0;
+      }
+      .milestone.done .milestone-icon {
+        background: linear-gradient(135deg, var(--gold), var(--rose));
+      }
+      .milestone-body { flex: 1; }
+      .milestone-title { font-weight: 500; font-size: 0.95rem; }
+      .milestone-date { font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
+      .milestone-check {
+        width: 28px; height: 28px; border-radius: 50%;
+        border: 2px solid var(--panel-line);
+        cursor: pointer; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: transparent;
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .milestone-check.checked {
+        background: var(--gold); border-color: var(--gold);
+      }
+      .milestone-check.checked::after {
+        content: ""; width: 8px; height: 14px;
+        border: solid var(--bg1); border-width: 0 3px 3px 0;
+        transform: rotate(45deg) translate(-1px, -1px);
+      }
+
+      /* --- Weekly cheer --- */
+      .cheer {
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 24px;
+        padding: 22px;
+        margin-bottom: 12px;
+        display: flex; flex-direction: column; align-items: center;
+        text-align: center;
+      }
+      .cheer-btn {
+        background: linear-gradient(135deg, var(--gold), var(--rose));
+        color: var(--bg1);
+        border: none; border-radius: 999px;
+        padding: 14px 26px;
+        font-family: inherit; font-weight: 600; font-size: 1rem;
+        cursor: pointer; margin-top: 4px;
+        box-shadow: 0 8px 24px rgba(230,197,110,0.35);
+        min-height: 48px;
+        transition: transform 0.15s;
+      }
+      .cheer-btn:active { transform: scale(0.96); }
+      .cheer-title { font-family: "Fraunces", serif; font-size: 1.15rem; margin-bottom: 6px; }
+      .cheer-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px; }
+
+      /* --- Note from me --- */
+      .letter {
+        background: linear-gradient(135deg, rgba(232,153,143,0.12), rgba(122,169,217,0.08));
+        border: 1px solid var(--panel-line);
+        border-radius: 24px;
+        padding: 24px;
+        margin-bottom: 12px;
+        font-family: "Fraunces", serif;
+        font-size: 1.05rem; line-height: 1.7;
+        color: var(--gold-soft);
+        font-weight: 300;
+      }
+      .letter p + p { margin-top: 12px; }
+      .letter .sig {
+        display: block; text-align: right; margin-top: 16px;
+        font-size: 0.95rem; color: var(--text-dim); font-style: italic;
+      }
+
+      footer {
+        text-align: center; color: var(--text-dim);
+        font-size: 0.8rem; margin-top: 32px;
+        padding: 0 20px;
+      }
+
+      /* firework overlay */
+      .fx {
+        position: fixed; inset: 0; pointer-events: none; z-index: 50;
+      }
+      .fx-heart {
+        position: absolute; font-size: 1.6rem;
+        opacity: 0;
+      }
+
+      @keyframes pop {
+        0% { transform: translate(-50%, 0) scale(0.3); opacity: 0; }
+        30% { transform: translate(-50%, -20px) scale(1.2); opacity: 1; }
+        100% { transform: translate(-50%, -240px) scale(0.6); opacity: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href="/" class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">◆ per te ◆</div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-eyebrow">until we're together again</div>
+        <h1 class="hero-title">Every day <em>closer</em>, my love</h1>
+        <p class="hero-sub">Milan → home · you're doing beautifully</p>
+      </section>
+
+      <div class="countdown">
+        <div class="cd-box"><div class="cd-num" id="cdD">--</div><div class="cd-label">days</div></div>
+        <div class="cd-box"><div class="cd-num" id="cdH">--</div><div class="cd-label">hours</div></div>
+        <div class="cd-box"><div class="cd-num" id="cdM">--</div><div class="cd-label">min</div></div>
+        <div class="cd-box"><div class="cd-num" id="cdS">--</div><div class="cd-label">sec</div></div>
+      </div>
+
+      <div class="journey">
+        <div class="journey-head">
+          <div class="journey-title">Your journey</div>
+          <div class="journey-pct" id="pct">--%</div>
+        </div>
+        <div class="path" id="path">
+          <div class="path-line"></div>
+          <div class="path-fill" id="pathFill" style="width: 0"></div>
+          <div class="path-marker done" style="left: 0"><div class="dot"></div><div class="lbl">Sep '26</div></div>
+          <div class="path-marker" style="left: 50%"><div class="dot"></div><div class="lbl">midway</div></div>
+          <div class="path-marker" style="left: 100%"><div class="dot"></div><div class="lbl" style="right: 0; left: auto;">Sep '28</div></div>
+          <div class="plane" id="plane" style="left: 0">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--gold)"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          </div>
+        </div>
+        <div class="journey-dates">
+          <span>Sep 3, 2026</span>
+          <span>Sep 3, 2028</span>
+        </div>
+      </div>
+
+      <div class="section-title">💭 for the moments you doubt</div>
+      <div class="quote-card">
+        <div class="quote-text" id="quoteText">Loading a little something for you...</div>
+        <button class="quote-more" id="quoteBtn">
+          another one
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3.5-7.13"/><path d="M21 4v6h-6"/></svg>
+        </button>
+      </div>
+
+      <div class="section-title">🎯 milestones on the way</div>
+      <div class="milestone-list" id="milestones">
+        <!-- filled by JS so we can mark done in localStorage -->
+      </div>
+
+      <div class="section-title">🌟 daily cheer</div>
+      <div class="cheer">
+        <div class="cheer-title">One tap, one hug from me</div>
+        <div class="cheer-sub">save your streak, feel me cheering from home</div>
+        <button class="cheer-btn" id="cheerBtn">💛 I did my best today</button>
+        <div style="margin-top: 14px; color: var(--gold-soft); font-family: 'Fraunces', serif; font-size: 1.1rem;" id="streak">streak: 0 days</div>
+      </div>
+
+      <div class="section-title">💌 a letter, always here</div>
+      <div class="letter">
+        <p>Tình yêu à,</p>
+        <p>When it feels heavy, remember: this is a season, not forever. You didn't fly across a continent for nothing. Every lecture, every long night in the library, every hard word in a new language — it's all making the person I'll meet at the airport in September 2028.</p>
+        <p>Take care of yourself first. Eat well. Sleep. Call Núp. Call me. Cry if you need to, then keep going. I'm right here, cheering so loud you can almost hear it.</p>
+        <p>Ti aspetto. Sempre.</p>
+        <span class="sig">— your one, from home ♡</span>
+      </div>
+
+      <footer>Milan · 3 Sep 2026 → Sep 2028 · we're closer every day</footer>
+    </div>
+
+    <div class="fx" id="fx" aria-hidden="true"></div>
+
+    <script type="module">
+      // ---------- constants ----------
+      const START = new Date("2026-09-03T00:00:00");
+      const END   = new Date("2028-09-03T00:00:00");
+      const store = {
+        get(k, d) { try { return JSON.parse(localStorage.getItem("fit:" + k)) ?? d; } catch { return d; } },
+        set(k, v) { localStorage.setItem("fit:" + k, JSON.stringify(v)); },
+      };
+
+      // ---------- countdown ----------
+      function tick() {
+        const now = new Date();
+        const diff = END - now;
+        if (diff <= 0) {
+          ["cdD","cdH","cdM","cdS"].forEach((id) => document.getElementById(id).textContent = "0");
+          return;
+        }
+        const d = Math.floor(diff / 864e5);
+        const h = Math.floor(diff / 36e5) % 24;
+        const m = Math.floor(diff / 6e4) % 60;
+        const s = Math.floor(diff / 1000) % 60;
+        document.getElementById("cdD").textContent = d;
+        document.getElementById("cdH").textContent = String(h).padStart(2,"0");
+        document.getElementById("cdM").textContent = String(m).padStart(2,"0");
+        document.getElementById("cdS").textContent = String(s).padStart(2,"0");
+
+        // progress
+        const total = END - START;
+        const done = now - START;
+        const pct = Math.max(0, Math.min(1, done / total));
+        document.getElementById("pct").textContent = (pct * 100).toFixed(1) + "%";
+        document.getElementById("pathFill").style.width = (pct * 100) + "%";
+        document.getElementById("plane").style.left = (pct * 100) + "%";
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      // ---------- quotes ----------
+      const quotes = [
+        "You didn't come this far to only come this far.",
+        "Un giorno alla volta. Ce la fai.",
+        "Piano piano si arriva lontano — slowly slowly, we go far.",
+        "The girl who left will meet the woman who graduated. I love them both.",
+        "Rest is not quitting. Rest is training.",
+        "You are exactly where you're supposed to be. On the way.",
+        "Tough days build the story you'll tell someday.",
+        "Homesick is love, still working. It means we're real.",
+        "One page, one paragraph, one paper. That's the whole trick.",
+        "Two years is a blink from a lifetime with you.",
+        "You are allowed to miss home AND keep going. Both are brave.",
+        "Even the Alps started small. Keep stacking.",
+        "The library will end. Us won't.",
+        "Whatever the exam says, you're still my favorite person on Earth.",
+        "If it were easy, it wouldn't change you.",
+      ];
+      let qIdx = -1;
+      function newQuote() {
+        let i;
+        do { i = Math.floor(Math.random() * quotes.length); } while (i === qIdx && quotes.length > 1);
+        qIdx = i;
+        const el = document.getElementById("quoteText");
+        el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: "forwards" }).onfinish = () => {
+          el.textContent = quotes[i];
+          el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: "forwards" });
+        };
+      }
+      newQuote();
+      document.getElementById("quoteBtn").addEventListener("click", newQuote);
+
+      // ---------- milestones ----------
+      const milestones = [
+        { icon: "✈️", title: "Arrived in Italy", date: "Sep 3, 2026", key: "m1" },
+        { icon: "📚", title: "First semester done", date: "Feb 2027", key: "m2" },
+        { icon: "🌸", title: "Year one complete", date: "Jul 2027", key: "m3" },
+        { icon: "🏛️", title: "Thesis proposal", date: "Feb 2028", key: "m4" },
+        { icon: "🎓", title: "Graduation", date: "Sep 2028", key: "m5" },
+        { icon: "🏡", title: "Home together", date: "after Sep 2028", key: "m6" },
+      ];
+      const mList = document.getElementById("milestones");
+      milestones.forEach((m) => {
+        const done = store.get("ms:" + m.key, false);
+        const el = document.createElement("div");
+        el.className = "milestone" + (done ? " done" : "");
+        el.innerHTML =
+          '<div class="milestone-icon">' + m.icon + '</div>' +
+          '<div class="milestone-body">' +
+            '<div class="milestone-title">' + m.title + '</div>' +
+            '<div class="milestone-date">' + m.date + '</div>' +
+          '</div>' +
+          '<button class="milestone-check' + (done ? " checked" : "") + '" aria-label="Toggle done"></button>';
+        el.querySelector(".milestone-check").addEventListener("click", () => {
+          const now = !el.classList.contains("done");
+          el.classList.toggle("done", now);
+          el.querySelector(".milestone-check").classList.toggle("checked", now);
+          store.set("ms:" + m.key, now);
+          if (now) hearts();
+        });
+        mList.appendChild(el);
+      });
+
+      // ---------- daily cheer & streak ----------
+      function today() { return new Date().toDateString(); }
+      function updateStreak() {
+        const days = store.get("cheerDays", []);
+        const s = document.getElementById("streak");
+        // count consecutive days ending today
+        let streak = 0;
+        const set = new Set(days);
+        let d = new Date();
+        while (set.has(d.toDateString())) {
+          streak++;
+          d.setDate(d.getDate() - 1);
+        }
+        s.textContent = "streak: " + streak + " day" + (streak === 1 ? "" : "s");
+      }
+      updateStreak();
+      document.getElementById("cheerBtn").addEventListener("click", () => {
+        const days = store.get("cheerDays", []);
+        if (!days.includes(today())) {
+          days.push(today());
+          store.set("cheerDays", days.slice(-90));
+        }
+        updateStreak();
+        hearts();
+      });
+
+      // ---------- little heart shower ----------
+      const fx = document.getElementById("fx");
+      const emojis = ["💛","💫","🌟","♡","✨"];
+      function hearts() {
+        for (let i = 0; i < 12; i++) {
+          const h = document.createElement("div");
+          h.className = "fx-heart";
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          h.style.left = (40 + Math.random() * 20) + "%";
+          h.style.bottom = "20%";
+          h.style.transform = "translate(-50%, 0)";
+          fx.appendChild(h);
+          h.animate([
+            { transform: "translate(-50%, 0) scale(0.3)", opacity: 0 },
+            { transform: "translate(calc(-50% + " + (Math.random() * 200 - 100) + "px), -" + (200 + Math.random() * 200) + "px) scale(1)", opacity: 1, offset: 0.4 },
+            { transform: "translate(calc(-50% + " + (Math.random() * 300 - 150) + "px), -" + (400 + Math.random() * 200) + "px) scale(0.5)", opacity: 0 },
+          ], { duration: 1800 + Math.random() * 600, easing: "ease-out" }).onfinish = () => h.remove();
+        }
+      }
+    </script>
+  </body>
+</html>

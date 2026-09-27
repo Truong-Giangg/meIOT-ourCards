@@ -1,0 +1,9 @@
+node_modules
+.parcel-cache
+dist
+.git
+.github
+temp
+Dockerfile
+docker-compose.yml
+.dockerignore

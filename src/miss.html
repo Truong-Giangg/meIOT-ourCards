@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a1836" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>I miss you</title>
+    <meta name="description" content="Same sky, same moon, same us." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,1,300;9..144,0,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg1: #050a1e;
+        --bg2: #0a1836;
+        --bg3: #142754;
+        --moon: #f7e8b8;
+        --moon-2: #ffd97a;
+        --sky: #7aa9d9;
+        --sky-2: #a8c5e8;
+        --rose: #e8998f;
+        --text: #f0eeff;
+        --text-dim: #a4aecb;
+      }
+      html, body { min-height: 100dvh; overflow-x: hidden; }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1200px 700px at 80% 10%, rgba(247,232,184,0.10), transparent),
+          radial-gradient(900px 500px at 20% 90%, rgba(232,153,143,0.08), transparent),
+          linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 60%, var(--bg3) 100%);
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        position: relative;
+      }
+      /* stars */
+      body::before {
+        content: "";
+        position: fixed; inset: 0;
+        background-image:
+          radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.7), transparent),
+          radial-gradient(1px 1px at 27% 62%, rgba(255,255,255,0.4), transparent),
+          radial-gradient(1.5px 1.5px at 45% 35%, rgba(255,255,255,0.8), transparent),
+          radial-gradient(1px 1px at 62% 78%, rgba(255,255,255,0.5), transparent),
+          radial-gradient(1.5px 1.5px at 78% 15%, rgba(255,255,255,0.7), transparent),
+          radial-gradient(1px 1px at 88% 55%, rgba(255,255,255,0.5), transparent),
+          radial-gradient(1px 1px at 8% 88%, rgba(255,255,255,0.4), transparent),
+          radial-gradient(1.5px 1.5px at 55% 12%, rgba(255,255,255,0.8), transparent);
+        pointer-events: none;
+        z-index: 1;
+        animation: twinkle 4s ease-in-out infinite alternate;
+      }
+      @keyframes twinkle { from { opacity: 0.5; } to { opacity: 1; } }
+
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 2; }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; font-style: italic;
+        color: var(--moon); font-size: 0.95rem; letter-spacing: 0.1em;
+      }
+
+      /* --- Hero with moon --- */
+      .hero {
+        text-align: center;
+        padding: 20px 0 12px;
+        position: relative;
+      }
+      .moon-scene {
+        width: 200px; height: 200px;
+        margin: 0 auto 20px;
+        position: relative;
+      }
+      .moon-glow {
+        position: absolute; inset: 0;
+        background: radial-gradient(circle, rgba(247,232,184,0.35), transparent 60%);
+        border-radius: 50%;
+        animation: moonPulse 4s ease-in-out infinite;
+      }
+      @keyframes moonPulse {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.1); opacity: 1; }
+      }
+      .moon-circle {
+        position: absolute; inset: 30px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fff8e0, var(--moon) 60%, #d4b880);
+        box-shadow: inset -12px -12px 30px rgba(0,0,0,0.15), 0 0 60px rgba(247,232,184,0.4);
+      }
+      .moon-crater { position: absolute; border-radius: 50%; background: rgba(0,0,0,0.06); }
+      .c1 { width: 20px; height: 20px; top: 30%; left: 30%; }
+      .c2 { width: 12px; height: 12px; top: 55%; left: 50%; }
+      .c3 { width: 8px; height: 8px; top: 40%; left: 60%; }
+      .c4 { width: 14px; height: 14px; top: 60%; left: 30%; }
+
+      .hero h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2rem, 7vw, 2.8rem);
+        font-weight: 300; font-style: italic;
+        line-height: 1.15;
+      }
+      .hero h1 em {
+        color: var(--moon-2); font-style: normal;
+      }
+      .hero p {
+        color: var(--text-dim);
+        margin-top: 10px; font-size: 0.95rem;
+      }
+
+      /* --- Time cards --- */
+      .time-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 24px 0 16px;
+      }
+      .time-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 16px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .time-city {
+        font-size: 0.75rem; letter-spacing: 0.25em;
+        text-transform: uppercase; color: var(--text-dim);
+        margin-bottom: 4px;
+      }
+      .time-value {
+        font-family: "Fraunces", serif; font-size: 2rem;
+        color: var(--moon); line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+      }
+      .time-note { font-size: 0.75rem; color: var(--text-dim); margin-top: 6px; }
+      .same-sky {
+        text-align: center;
+        color: var(--rose);
+        font-family: "Fraunces", serif; font-style: italic;
+        margin: 8px 0 20px;
+      }
+
+      /* --- Distance --- */
+      .distance {
+        background: linear-gradient(135deg, rgba(247,232,184,0.1), rgba(122,169,217,0.1));
+        border: 1px solid rgba(247,232,184,0.2);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 16px;
+        text-align: center;
+      }
+      .distance-label { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--moon); margin-bottom: 8px; }
+      .distance-num {
+        font-family: "Fraunces", serif; font-size: 2.4rem;
+        color: var(--moon-2); line-height: 1;
+      }
+      .distance-note { color: var(--text-dim); font-size: 0.9rem; margin-top: 8px; }
+      .distance-map {
+        margin-top: 14px;
+        height: 40px; position: relative;
+        display: flex; align-items: center;
+      }
+      .distance-map::before {
+        content: ""; position: absolute; left: 20px; right: 20px;
+        height: 1px; background: linear-gradient(90deg, transparent, var(--moon), transparent);
+      }
+      .distance-map .dot {
+        position: absolute; width: 12px; height: 12px; border-radius: 50%;
+        transform: translateY(0);
+      }
+      .distance-map .dot-l { left: 15px; background: var(--rose); box-shadow: 0 0 12px var(--rose); }
+      .distance-map .dot-r { right: 15px; background: var(--moon); box-shadow: 0 0 12px var(--moon); }
+      .distance-map .label {
+        position: absolute; font-size: 0.7rem; color: var(--text-dim); top: 22px;
+      }
+      .distance-map .label-l { left: 8px; }
+      .distance-map .label-r { right: 8px; }
+
+      /* --- Section --- */
+      .section-title {
+        font-family: "Fraunces", serif; font-size: 1.15rem;
+        margin: 24px 4px 12px;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      /* --- Memories slideshow --- */
+      .memory-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 24px;
+        margin-bottom: 16px;
+        min-height: 200px;
+        display: flex; flex-direction: column; justify-content: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .memory-num {
+        position: absolute; top: 12px; right: 20px;
+        color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.15em;
+      }
+      .memory-emoji {
+        font-size: 2.5rem; margin-bottom: 12px;
+      }
+      .memory-text {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem; font-style: italic;
+        line-height: 1.5; color: var(--moon);
+      }
+      .memory-nav {
+        display: flex; justify-content: center; gap: 10px; margin-top: 16px;
+      }
+      .memory-nav button {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: var(--text);
+        width: 44px; height: 44px; border-radius: 50%;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+      }
+
+      /* --- Voice-note style message --- */
+      .send-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+      .send-title { font-family: "Fraunces", serif; font-size: 1.1rem; margin-bottom: 4px; }
+      .send-sub { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 14px; }
+      .send-input {
+        display: flex; gap: 8px; margin-bottom: 12px;
+      }
+      .send-input textarea {
+        flex: 1;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: var(--text);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-family: inherit; font-size: 0.95rem;
+        outline: none;
+        min-height: 60px; max-height: 120px;
+        resize: none;
+      }
+      .send-input textarea:focus { border-color: var(--moon); }
+      .send-btn {
+        background: var(--moon); color: var(--bg1);
+        border: none; border-radius: 14px;
+        padding: 0 18px;
+        font-family: inherit; font-weight: 600;
+        cursor: pointer; min-height: 44px; min-width: 44px;
+      }
+      .letter-list {
+        list-style: none;
+        max-height: 260px; overflow-y: auto;
+      }
+      .letter-list li {
+        padding: 12px;
+        margin-bottom: 8px;
+        background: rgba(232,153,143,0.06);
+        border: 1px solid rgba(232,153,143,0.15);
+        border-radius: 14px;
+      }
+      .letter-when {
+        font-size: 0.75rem; color: var(--rose);
+        margin-bottom: 4px;
+      }
+      .letter-text {
+        font-family: "Fraunces", serif; font-style: italic;
+        color: var(--text); line-height: 1.5;
+      }
+
+      footer {
+        text-align: center; color: var(--text-dim);
+        font-size: 0.8rem; margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href="/" class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">◇ ti manco ◇</div>
+      </header>
+
+      <section class="hero">
+        <div class="moon-scene">
+          <div class="moon-glow"></div>
+          <div class="moon-circle">
+            <div class="moon-crater c1"></div>
+            <div class="moon-crater c2"></div>
+            <div class="moon-crater c3"></div>
+            <div class="moon-crater c4"></div>
+          </div>
+        </div>
+        <h1>Same <em>moon</em>, same us.</h1>
+        <p>look up tonight — I'll be looking too</p>
+      </section>
+
+      <div class="time-cards">
+        <div class="time-card">
+          <div class="time-city">home</div>
+          <div class="time-value" id="homeTime">--:--</div>
+          <div class="time-note" id="homeDate">--</div>
+        </div>
+        <div class="time-card">
+          <div class="time-city">milan</div>
+          <div class="time-value" id="milanTime">--:--</div>
+          <div class="time-note" id="milanDate">--</div>
+        </div>
+      </div>
+      <div class="same-sky" id="skyMsg">✧ same sky, always ✧</div>
+
+      <div class="distance">
+        <div class="distance-label">between us</div>
+        <div class="distance-num">≈ 9,050 km</div>
+        <div class="distance-note">Hanoi ← 12 hr flight → Milan</div>
+        <div class="distance-map">
+          <span class="dot dot-l"></span>
+          <span class="label label-l">you</span>
+          <span class="dot dot-r"></span>
+          <span class="label label-r">me</span>
+        </div>
+      </div>
+
+      <div class="section-title">💫 memories on rotation</div>
+      <div class="memory-card">
+        <div class="memory-num"><span id="mIdx">1</span> / <span id="mTot">--</span></div>
+        <div class="memory-emoji" id="memEmoji">☕</div>
+        <div class="memory-text" id="memText">Loading a memory...</div>
+        <div class="memory-nav">
+          <button id="memPrev" aria-label="Previous">‹</button>
+          <button id="memNext" aria-label="Next">›</button>
+        </div>
+      </div>
+
+      <div class="section-title">💌 leave me a note</div>
+      <div class="send-card">
+        <div class="send-title">Little love letters</div>
+        <div class="send-sub">saved just for us · both write, both read</div>
+        <div class="send-input">
+          <textarea id="letterInput" placeholder="thinking of you because..." maxlength="500"></textarea>
+          <button class="send-btn" id="letterBtn" aria-label="Send">✎</button>
+        </div>
+        <ul class="letter-list" id="letterList"></ul>
+      </div>
+
+      <footer>same sky · same us · always ♡</footer>
+    </div>
+
+    <script type="module">
+      const store = {
+        get(k, d) { try { return JSON.parse(localStorage.getItem("miss:" + k)) ?? d; } catch { return d; } },
+        set(k, v) { localStorage.setItem("miss:" + k, JSON.stringify(v)); },
+      };
+
+      // ---------- clocks ----------
+      function tick() {
+        const now = new Date();
+        try {
+          document.getElementById("homeTime").textContent = now.toLocaleTimeString("en-GB", { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit" });
+          document.getElementById("homeDate").textContent = now.toLocaleDateString("en-US", { timeZone: "Asia/Ho_Chi_Minh", weekday: "short", month: "short", day: "numeric" });
+          document.getElementById("milanTime").textContent = now.toLocaleTimeString("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", minute: "2-digit" });
+          document.getElementById("milanDate").textContent = now.toLocaleDateString("en-US", { timeZone: "Europe/Rome", weekday: "short", month: "short", day: "numeric" });
+          // sky message
+          const hourMilan = parseInt(new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/Rome", hour: "2-digit", hour12: false }));
+          const hourHome = parseInt(new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", hour12: false }));
+          let msg = "✧ same sky, always ✧";
+          if (hourMilan >= 22 || hourMilan < 6) msg = "you might be sleeping — dream of me";
+          else if (hourHome >= 22 || hourHome < 6) msg = "I might be sleeping — I dream of you";
+          else if (hourMilan < 12 && hourHome > 12) msg = "your morning, my afternoon — same day, apart";
+          document.getElementById("skyMsg").textContent = msg;
+        } catch (e) {}
+      }
+      tick();
+      setInterval(tick, 30_000);
+
+      // ---------- memories ----------
+      const memories = [
+        { e: "☕", t: "The morning we shared one coffee because we forgot our second cup." },
+        { e: "🌧", t: "That rainy walk when we didn't have an umbrella and didn't care." },
+        { e: "🎬", t: "You crying at that movie ending, and me pretending not to notice." },
+        { e: "🍜", t: "3 AM noodles in the tiny kitchen, mismatched pajamas." },
+        { e: "📚", t: "You reading beside me while I 'worked' but really just watched you." },
+        { e: "🌸", t: "Spring, first sunny day, that park bench, your laugh." },
+        { e: "🐈", t: "The day Núp chose you and never looked back." },
+        { e: "✈️", t: "Airport goodbye — 'this isn't forever' and it isn't." },
+        { e: "🎂", t: "Every birthday I stole an extra slice for you." },
+        { e: "🎵", t: "That song. You know which one. It's still ours." },
+        { e: "📷", t: "The photo we took but never posted — my favorite one." },
+        { e: "🌙", t: "Nights we counted the stars and lost count." },
+        { e: "🍷", t: "The wine we spilled and blamed on the cat." },
+        { e: "✏️", t: "Your little notes on my desk when I worked late." },
+        { e: "🌊", t: "The beach trip, your hair full of sand, your smile full of sun." },
+      ];
+      let mi = 0;
+      document.getElementById("mTot").textContent = memories.length;
+      function showMem(i) {
+        mi = (i + memories.length) % memories.length;
+        document.getElementById("mIdx").textContent = mi + 1;
+        document.getElementById("memEmoji").textContent = memories[mi].e;
+        const t = document.getElementById("memText");
+        t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: "forwards" }).onfinish = () => {
+          t.textContent = memories[mi].t;
+          t.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: "forwards" });
+        };
+      }
+      showMem(0);
+      // rotate every 8s
+      setInterval(() => showMem(mi + 1), 8000);
+      document.getElementById("memPrev").addEventListener("click", () => showMem(mi - 1));
+      document.getElementById("memNext").addEventListener("click", () => showMem(mi + 1));
+
+      // ---------- letters ----------
+      const list = document.getElementById("letterList");
+      const input = document.getElementById("letterInput");
+      function escapeHtml(s) { return s.replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+      function render() {
+        const arr = store.get("letters", []);
+        list.innerHTML = arr.map((l) =>
+          '<li><div class="letter-when">' + l.when + '</div><div class="letter-text">' + escapeHtml(l.text) + '</div></li>'
+        ).join("");
+      }
+      function add() {
+        const v = input.value.trim();
+        if (!v) return;
+        const arr = store.get("letters", []);
+        const when = new Date().toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+        arr.unshift({ text: v, when });
+        store.set("letters", arr.slice(0, 50));
+        input.value = "";
+        render();
+      }
+      document.getElementById("letterBtn").addEventListener("click", add);
+      render();
+    </script>
+  </body>
+</html>

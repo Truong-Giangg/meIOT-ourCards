@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0d24" />
+    <meta name="msapplication-navbutton-color" content="#0a0d24" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#0a0d24" />
+
+    <title>Sleep well · meIOT</title>
+    <meta name="title" content="Sleep well" />
+    <meta name="description" content="Count sheep, breathe slow, drift off." />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sleep well" />
+    <meta property="og:description" content="Count sheep, breathe slow, drift off." />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&family=Quicksand:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./resources/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./resources/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg-top: #0a0d24;
+        --bg-mid: #141852;
+        --bg-bot: #2a1a4a;
+        --text: #e8e6ff;
+        --text-dim: #8a86b8;
+        --accent: #f7d774;
+        --accent-soft: #ffe9a8;
+        --panel: rgba(20, 24, 82, 0.55);
+        --panel-border: rgba(232, 230, 255, 0.12);
+        --track: rgba(232, 230, 255, 0.15);
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        font-family: "Quicksand", "Courgette", sans-serif;
+        color: var(--text);
+        background: radial-gradient(
+            ellipse at 70% 20%,
+            rgba(247, 215, 116, 0.08),
+            transparent 55%
+          ),
+          linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bot) 100%);
+        -webkit-font-smoothing: antialiased;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      /* --- Scene layers --- */
+      .scene {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .stars {
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(1px 1px at 12% 18%, #ffffffaa, transparent 60%),
+          radial-gradient(1px 1px at 27% 62%, #ffffff88, transparent 60%),
+          radial-gradient(1.5px 1.5px at 45% 30%, #ffffffcc, transparent 60%),
+          radial-gradient(1px 1px at 62% 78%, #ffffff77, transparent 60%),
+          radial-gradient(1.5px 1.5px at 78% 22%, #ffffffbb, transparent 60%),
+          radial-gradient(1px 1px at 88% 55%, #ffffff99, transparent 60%),
+          radial-gradient(1px 1px at 8% 82%, #ffffff88, transparent 60%),
+          radial-gradient(1px 1px at 35% 88%, #ffffff77, transparent 60%),
+          radial-gradient(1.5px 1.5px at 55% 12%, #ffffffcc, transparent 60%),
+          radial-gradient(1px 1px at 72% 46%, #ffffff88, transparent 60%);
+        animation: twinkle 6s ease-in-out infinite alternate;
+      }
+
+      @keyframes twinkle {
+        from { opacity: 0.55; }
+        to   { opacity: 1; }
+      }
+
+      .moon {
+        position: absolute;
+        top: 8%;
+        right: 10%;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fff6d5, #f7d774 60%, #b89a4a);
+        box-shadow: 0 0 40px rgba(247, 215, 116, 0.35), 0 0 90px rgba(247, 215, 116, 0.18);
+      }
+
+      .moon::after {
+        content: "";
+        position: absolute;
+        top: 6%;
+        left: 22%;
+        width: 78%;
+        height: 88%;
+        border-radius: 50%;
+        background: var(--bg-mid);
+        box-shadow: 0 0 30px var(--bg-mid);
+      }
+
+      .ground {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 22%;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.55));
+      }
+
+      .fence {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 20%;
+        height: 60px;
+        pointer-events: none;
+      }
+
+      .fence svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* --- Sheep --- */
+      .sheep {
+        position: absolute;
+        bottom: 22%;
+        left: -180px;
+        width: 140px;
+        height: 100px;
+        pointer-events: none;
+        will-change: transform;
+        animation: sheep-jump 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .sheep svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .sheep.paused {
+        animation-play-state: paused;
+      }
+
+      @keyframes sheep-jump {
+        0%   { transform: translate(0, 0) scaleX(1); }
+        40%  { transform: translate(45vw, 0) scaleX(1); }
+        50%  { transform: translate(50vw, -110px) scaleX(1); }
+        60%  { transform: translate(55vw, 0) scaleX(1); }
+        100% { transform: translate(120vw, 0) scaleX(1); }
+      }
+
+      /* --- Overlay UI --- */
+      .overlay {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .title {
+        font-family: "Courgette", cursive;
+        font-size: 1.6rem;
+        letter-spacing: 0.02em;
+        color: var(--accent-soft);
+        text-shadow: 0 0 24px rgba(247, 215, 116, 0.25);
+      }
+
+      .icon-btn {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        color: var(--text);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: transform 0.2s, background 0.2s;
+      }
+
+      .icon-btn:hover { background: rgba(20, 24, 82, 0.75); }
+      .icon-btn:active { transform: scale(0.94); }
+
+      /* --- Counter center --- */
+      .counter-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 6px;
+      }
+
+      .count-label {
+        font-size: 0.9rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+      }
+
+      .count {
+        font-family: "Courgette", cursive;
+        font-size: clamp(5rem, 18vw, 10rem);
+        line-height: 1;
+        color: var(--accent-soft);
+        text-shadow: 0 0 30px rgba(247, 215, 116, 0.35);
+        transition: opacity 0.4s ease;
+      }
+
+      .count-hint {
+        color: var(--text-dim);
+        font-size: 0.9rem;
+        margin-top: 4px;
+        min-height: 1.4em;
+      }
+
+      /* --- Bottom panel --- */
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 20px;
+        padding: 16px 18px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .panel + .panel { margin-top: 12px; }
+
+      .panel-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .panel-row + .panel-row { margin-top: 12px; }
+
+      .primary-btn {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        background: linear-gradient(135deg, #f7d774, #ffb26b);
+        color: #1a1836;
+        padding: 12px 20px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 6px 18px rgba(247, 215, 116, 0.28);
+        transition: transform 0.15s;
+      }
+
+      .primary-btn:active { transform: scale(0.96); }
+
+      .ghost-btn {
+        appearance: none;
+        border: 1px solid var(--panel-border);
+        background: transparent;
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.95rem;
+      }
+
+      .ghost-btn:hover { background: rgba(232, 230, 255, 0.06); }
+
+      .speed-label {
+        color: var(--text-dim);
+        font-size: 0.85rem;
+        min-width: 70px;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        flex: 1;
+        height: 4px;
+        background: var(--track);
+        border-radius: 999px;
+        outline: none;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(247, 215, 116, 0.4);
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        cursor: pointer;
+        border: none;
+      }
+
+      /* --- Sound grid --- */
+      .sounds-title {
+        font-size: 0.8rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+        margin-bottom: 10px;
+      }
+
+      .sound-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      @media (min-width: 640px) {
+        .sound-grid { grid-template-columns: repeat(4, 1fr); }
+      }
+
+      .sound-card {
+        background: rgba(232, 230, 255, 0.04);
+        border: 1px solid var(--panel-border);
+        border-radius: 14px;
+        padding: 12px;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+      }
+
+      .sound-card:hover { background: rgba(232, 230, 255, 0.08); }
+
+      .sound-card.on {
+        background: rgba(247, 215, 116, 0.12);
+        border-color: rgba(247, 215, 116, 0.5);
+      }
+
+      .sound-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .sound-name {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+      }
+
+      .sound-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--text-dim);
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+
+      .sound-card.on .sound-dot {
+        background: var(--accent);
+        box-shadow: 0 0 10px var(--accent);
+      }
+
+      .sound-card input[type="range"] {
+        width: 100%;
+      }
+
+      /* --- Timer overlay fade --- */
+      .dim-veil {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 60s linear;
+        z-index: 3;
+      }
+
+      .dim-veil.dimming { opacity: 1; }
+
+      /* --- Toast --- */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(30px);
+        background: rgba(20, 24, 82, 0.9);
+        border: 1px solid var(--panel-border);
+        color: var(--text);
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+        z-index: 5;
+        backdrop-filter: blur(8px);
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* --- Small screens tweaks --- */
+      @media (max-height: 640px) {
+        .moon { width: 60px; height: 60px; top: 5%; }
+        .sheep { width: 110px; height: 78px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scene" aria-hidden="true">
+      <div class="stars"></div>
+      <div class="moon"></div>
+      <div class="ground"></div>
+
+      <div class="fence">
+        <svg viewBox="0 0 800 60" preserveAspectRatio="none">
+          <g fill="#3a2f5a" stroke="#1a1836" stroke-width="1">
+            <rect x="0" y="30" width="800" height="6" />
+            <rect x="0" y="46" width="800" height="4" />
+            <g>
+              <rect x="60" y="10" width="8" height="50" />
+              <rect x="160" y="10" width="8" height="50" />
+              <rect x="260" y="10" width="8" height="50" />
+              <rect x="360" y="10" width="8" height="50" />
+              <rect x="460" y="10" width="8" height="50" />
+              <rect x="560" y="10" width="8" height="50" />
+              <rect x="660" y="10" width="8" height="50" />
+              <rect x="760" y="10" width="8" height="50" />
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="sheep" id="sheep">
+        <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="70" cy="60" rx="45" ry="28" fill="#f5f1ff" />
+          <circle cx="42" cy="52" r="14" fill="#f5f1ff" />
+          <circle cx="52" cy="45" r="12" fill="#f5f1ff" />
+          <circle cx="88" cy="45" r="14" fill="#f5f1ff" />
+          <circle cx="95" cy="55" r="12" fill="#f5f1ff" />
+          <ellipse cx="30" cy="55" rx="10" ry="12" fill="#2a2340" />
+          <circle cx="26" cy="52" r="2" fill="#f5f1ff" />
+          <ellipse cx="22" cy="46" rx="3" ry="5" fill="#2a2340" transform="rotate(-20 22 46)" />
+          <rect x="55" y="80" width="4" height="15" fill="#2a2340" />
+          <rect x="82" y="80" width="4" height="15" fill="#2a2340" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="overlay">
+      <header>
+        <a href="/" class="icon-btn" aria-label="Home" title="Home">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        </a>
+        <div class="title">sleep well</div>
+        <button class="icon-btn" id="fullscreenBtn" aria-label="Fullscreen" title="Fullscreen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></svg>
+        </button>
+      </header>
+
+      <div class="counter-wrap">
+        <div class="count-label">sheep</div>
+        <div class="count" id="count">0</div>
+        <div class="count-hint" id="hint">tap start to begin counting</div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="panel-row">
+            <button class="primary-btn" id="toggleBtn">
+              <svg id="playIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <span id="toggleLabel">Start</span>
+            </button>
+            <button class="ghost-btn" id="resetBtn">Reset</button>
+            <button class="ghost-btn" id="timerBtn" title="Sleep timer">⏱ Timer</button>
+          </div>
+          <div class="panel-row">
+            <span class="speed-label">Pace</span>
+            <input type="range" id="speed" min="2" max="8" step="0.5" value="4" />
+            <span class="speed-label" id="speedVal">4.0s</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="sounds-title">ambient sounds</div>
+          <div class="sound-grid" id="soundGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dim-veil" id="dimVeil"></div>
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+      // ============================================================
+      // Sheep counter
+      // ============================================================
+      const countEl = document.getElementById("count");
+      const hintEl = document.getElementById("hint");
+      const toggleBtn = document.getElementById("toggleBtn");
+      const toggleLabel = document.getElementById("toggleLabel");
+      const playIcon = document.getElementById("playIcon");
+      const resetBtn = document.getElementById("resetBtn");
+      const sheepEl = document.getElementById("sheep");
+      const speedInput = document.getElementById("speed");
+      const speedVal = document.getElementById("speedVal");
+      const timerBtn = document.getElementById("timerBtn");
+      const dimVeil = document.getElementById("dimVeil");
+      const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+      const hints = [
+        "breathe in slowly...",
+        "and breathe out...",
+        "let your shoulders drop",
+        "soften your jaw",
+        "you're safe here",
+        "one sheep at a time",
+        "the day can rest now",
+        "sleep is on its way",
+      ];
+
+      let count = 0;
+      let running = false;
+      let intervalId = null;
+      let pace = 4;
+
+      function setPace(v) {
+        pace = parseFloat(v);
+        speedVal.textContent = pace.toFixed(1) + "s";
+        sheepEl.style.animationDuration = pace + "s";
+        if (running) restartInterval();
+      }
+
+      function updateHint() {
+        const h = hints[Math.floor(Math.random() * hints.length)];
+        hintEl.textContent = h;
+      }
+
+      function tick() {
+        count += 1;
+        countEl.style.opacity = 0;
+        setTimeout(() => {
+          countEl.textContent = count;
+          countEl.style.opacity = 1;
+        }, 200);
+        if (count % 3 === 0) updateHint();
+      }
+
+      function restartInterval() {
+        clearInterval(intervalId);
+        intervalId = setInterval(tick, pace * 1000);
+      }
+
+      function start() {
+        running = true;
+        sheepEl.classList.remove("paused");
+        toggleLabel.textContent = "Pause";
+        playIcon.innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
+        tick();
+        restartInterval();
+        keepAwake();
+      }
+
+      function pause() {
+        running = false;
+        sheepEl.classList.add("paused");
+        toggleLabel.textContent = "Start";
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        clearInterval(intervalId);
+        releaseWake();
+      }
+
+      function reset() {
+        pause();
+        count = 0;
+        countEl.textContent = "0";
+        hintEl.textContent = "tap start to begin counting";
+      }
+
+      toggleBtn.addEventListener("click", () => (running ? pause() : start()));
+      resetBtn.addEventListener("click", reset);
+      speedInput.addEventListener("input", (e) => setPace(e.target.value));
+
+      // pause sheep on hidden tab
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && running) pause();
+      });
+
+      // ============================================================
+      // Fullscreen
+      // ============================================================
+      fullscreenBtn.addEventListener("click", async () => {
+        try {
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+        } catch (e) {}
+      });
+
+      // ============================================================
+      // Wake Lock
+      // ============================================================
+      let wakeLock = null;
+      async function keepAwake() {
+        try {
+          if ("wakeLock" in navigator) {
+            wakeLock = await navigator.wakeLock.request("screen");
+          }
+        } catch (e) {}
+      }
+      function releaseWake() {
+        if (wakeLock) {
+          wakeLock.release().catch(() => {});
+          wakeLock = null;
+        }
+      }
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && running) keepAwake();
+      });
+
+      // ============================================================
+      // Sleep timer (dim + stop everything)
+      // ============================================================
+      const timerOptions = [
+        { label: "off", mins: 0 },
+        { label: "10 min", mins: 10 },
+        { label: "20 min", mins: 20 },
+        { label: "30 min", mins: 30 },
+        { label: "60 min", mins: 60 },
+      ];
+      let timerIndex = 0;
+      let timerTimeout = null;
+      let dimTimeout = null;
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._t);
+        t._t = setTimeout(() => t.classList.remove("show"), 1800);
+      }
+
+      function applyTimer() {
+        clearTimeout(timerTimeout);
+        clearTimeout(dimTimeout);
+        dimVeil.classList.remove("dimming");
+        const opt = timerOptions[timerIndex];
+        timerBtn.textContent = opt.mins === 0 ? "⏱ Timer" : "⏱ " + opt.label;
+        if (opt.mins > 0) {
+          const ms = opt.mins * 60 * 1000;
+          // start dim 60s before the end
+          dimTimeout = setTimeout(() => dimVeil.classList.add("dimming"), Math.max(0, ms - 60000));
+          timerTimeout = setTimeout(() => {
+            pause();
+            SoundEngine.stopAll();
+          }, ms);
+          showToast("sleep timer: " + opt.label);
+        } else {
+          showToast("timer off");
+        }
+      }
+
+      timerBtn.addEventListener("click", () => {
+        timerIndex = (timerIndex + 1) % timerOptions.length;
+        applyTimer();
+      });
+
+      // ============================================================
+      // Ambient sound engine (procedural, no audio files)
+      // ============================================================
+      const SoundEngine = (function () {
+        let ctx = null;
+        const nodes = {};
+
+        function ensureCtx() {
+          if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+          if (ctx.state === "suspended") ctx.resume();
+          return ctx;
+        }
+
+        function makeNoiseBuffer(type) {
+          const c = ensureCtx();
+          const seconds = 2;
+          const buf = c.createBuffer(1, c.sampleRate * seconds, c.sampleRate);
+          const data = buf.getChannelData(0);
+          if (type === "white") {
+            for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+          } else if (type === "brown") {
+            let last = 0;
+            for (let i = 0; i < data.length; i++) {
+              const w = Math.random() * 2 - 1;
+              last = (last + 0.02 * w) / 1.02;
+              data[i] = last * 3.5;
+            }
+          } else if (type === "pink") {
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+            for (let i = 0; i < data.length; i++) {
+              const w = Math.random() * 2 - 1;
+              b0 = 0.99886 * b0 + w * 0.0555179;
+              b1 = 0.99332 * b1 + w * 0.0750759;
+              b2 = 0.96900 * b2 + w * 0.1538520;
+              b3 = 0.86650 * b3 + w * 0.3104856;
+              b4 = 0.55000 * b4 + w * 0.5329522;
+              b5 = -0.7616 * b5 - w * 0.0168980;
+              data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11;
+              b6 = w * 0.115926;
+            }
+          }
+          return buf;
+        }
+
+        function buildRain(gain) {
+          const c = ensureCtx();
+          const src = c.createBufferSource();
+          src.buffer = makeNoiseBuffer("white");
+          src.loop = true;
+          const hp = c.createBiquadFilter();
+          hp.type = "highpass";
+          hp.frequency.value = 800;
+          const lp = c.createBiquadFilter();
+          lp.type = "lowpass";
+          lp.frequency.value = 5000;
+          src.connect(hp).connect(lp).connect(gain);
+          src.start();
+          return { src };
+        }
+
+        function buildOcean(gain) {
+          const c = ensureCtx();
+          const src = c.createBufferSource();
+          src.buffer = makeNoiseBuffer("brown");
+          src.loop = true;
+          const lp = c.createBiquadFilter();
+          lp.type = "lowpass";
+          lp.frequency.value = 900;
+
+          // LFO modulates a tremolo gain to simulate waves
+          const waveGain = c.createGain();
+          waveGain.gain.value = 0.5;
+          const lfo = c.createOscillator();
+          lfo.frequency.value = 0.12; // slow wave
+          const lfoGain = c.createGain();
+          lfoGain.gain.value = 0.45;
+          lfo.connect(lfoGain).connect(waveGain.gain);
+
+          src.connect(lp).connect(waveGain).connect(gain);
+          src.start();
+          lfo.start();
+          return { src, lfo };
+        }
+
+        function buildBrown(gain) {
+          const c = ensureCtx();
+          const src = c.createBufferSource();
+          src.buffer = makeNoiseBuffer("brown");
+          src.loop = true;
+          src.connect(gain);
+          src.start();
+          return { src };
+        }
+
+        function buildWind(gain) {
+          const c = ensureCtx();
+          const src = c.createBufferSource();
+          src.buffer = makeNoiseBuffer("pink");
+          src.loop = true;
+          const bp = c.createBiquadFilter();
+          bp.type = "bandpass";
+          bp.frequency.value = 500;
+          bp.Q.value = 0.7;
+
+          // slow filter sweep for wind gust feel
+          const lfo = c.createOscillator();
+          lfo.frequency.value = 0.08;
+          const lfoGain = c.createGain();
+          lfoGain.gain.value = 300;
+          lfo.connect(lfoGain).connect(bp.frequency);
+
+          src.connect(bp).connect(gain);
+          src.start();
+          lfo.start();
+          return { src, lfo };
+        }
+
+        const builders = {
+          rain: buildRain,
+          ocean: buildOcean,
+          brown: buildBrown,
+          wind: buildWind,
+        };
+
+        function setVolume(key, v) {
+          if (!nodes[key]) return;
+          nodes[key].gain.gain.setTargetAtTime(v, ensureCtx().currentTime, 0.05);
+        }
+
+        function toggle(key, on, vol) {
+          const c = ensureCtx();
+          if (on) {
+            if (nodes[key]) return;
+            const gain = c.createGain();
+            gain.gain.value = 0;
+            gain.connect(c.destination);
+            const parts = builders[key](gain);
+            nodes[key] = { gain, ...parts };
+            gain.gain.setTargetAtTime(vol, c.currentTime, 0.5);
+          } else {
+            if (!nodes[key]) return;
+            const n = nodes[key];
+            n.gain.gain.setTargetAtTime(0, c.currentTime, 0.4);
+            setTimeout(() => {
+              try { n.src.stop(); } catch (e) {}
+              try { n.lfo && n.lfo.stop(); } catch (e) {}
+              try { n.gain.disconnect(); } catch (e) {}
+              delete nodes[key];
+            }, 800);
+          }
+        }
+
+        function stopAll() {
+          Object.keys(nodes).forEach((k) => toggle(k, false));
+        }
+
+        return { toggle, setVolume, stopAll };
+      })();
+
+      // Build sound cards
+      const sounds = [
+        { key: "rain",  label: "🌧  Rain",  vol: 0.4 },
+        { key: "ocean", label: "🌊  Ocean", vol: 0.5 },
+        { key: "brown", label: "🌫  Brown", vol: 0.3 },
+        { key: "wind",  label: "🍃  Wind",  vol: 0.35 },
+      ];
+
+      const grid = document.getElementById("soundGrid");
+      sounds.forEach((s) => {
+        const card = document.createElement("div");
+        card.className = "sound-card";
+        card.dataset.key = s.key;
+        card.innerHTML = `
+          <div class="sound-head">
+            <span class="sound-name"><span class="sound-dot"></span>${s.label}</span>
+          </div>
+          <input type="range" min="0" max="1" step="0.01" value="${s.vol}" aria-label="${s.label} volume" />
+        `;
+        const slider = card.querySelector("input");
+        let on = false;
+
+        card.addEventListener("click", (e) => {
+          if (e.target === slider) return;
+          on = !on;
+          card.classList.toggle("on", on);
+          SoundEngine.toggle(s.key, on, parseFloat(slider.value));
+        });
+
+        slider.addEventListener("input", (e) => {
+          const v = parseFloat(e.target.value);
+          if (on) SoundEngine.setVolume(s.key, v);
+        });
+
+        grid.appendChild(card);
+      });
+
+      // ============================================================
+      // Init
+      // ============================================================
+      setPace(speedInput.value);
+      updateHint();
+    </script>
+  </body>
+</html>

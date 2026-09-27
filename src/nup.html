@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4ede1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Núp · our little one</title>
+    <meta name="description" content="Everything about Núp — his day, his mood, his next vet visit." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Núp — our little one" />
+    <meta property="og:description" content="Everything about Núp." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./resources/favicon/favicon-32x32.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg: #f4ede1;
+        --bg2: #ede2ce;
+        --card: #ffffff;
+        --ink: #3a2e26;
+        --ink-dim: #7a6c60;
+        --accent: #d97757;
+        --accent-soft: #f4c9b3;
+        --ok: #7ba86a;
+        --warn: #d4a24c;
+        --err: #c26f6f;
+        --shadow: 0 8px 24px rgba(90, 60, 40, 0.08);
+      }
+      html, body { min-height: 100dvh; overflow-x: hidden; }
+      body {
+        font-family: "Quicksand", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(1200px 500px at 100% -10%, #ffe6d2, transparent),
+          radial-gradient(900px 400px at -10% 20%, #fff2df, transparent),
+          linear-gradient(180deg, var(--bg), var(--bg2));
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+      }
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--ink-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.6);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; font-weight: 500;
+        font-size: 1rem; color: var(--ink-dim);
+        display: flex; align-items: center; gap: 8px;
+      }
+      .brand .paw { width: 20px; height: 20px; }
+
+      .hero {
+        background: var(--card);
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        margin-bottom: 16px;
+        position: relative; overflow: hidden;
+      }
+      .hero-top { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+      .avatar {
+        width: 84px; height: 84px; border-radius: 50%;
+        background: linear-gradient(135deg, #f4c9b3, #d97757);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 6px 20px rgba(217, 119, 87, 0.35);
+        flex-shrink: 0;
+      }
+      .hero-title {
+        font-family: "Fraunces", serif;
+        font-size: 2rem; font-weight: 500;
+        line-height: 1.1;
+      }
+      .hero-title .heart { color: var(--accent); }
+      .hero-sub { color: var(--ink-dim); font-size: 0.95rem; margin-top: 4px; }
+
+      .mood-row {
+        display: flex; gap: 10px; overflow-x: auto;
+        margin: 0 -24px; padding: 4px 24px 12px;
+        scrollbar-width: none;
+      }
+      .mood-row::-webkit-scrollbar { display: none; }
+      .mood-chip {
+        flex-shrink: 0;
+        border: 1.5px solid var(--bg2);
+        background: var(--bg);
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-family: inherit; font-size: 0.95rem; color: var(--ink);
+        cursor: pointer; min-height: 44px;
+        display: inline-flex; align-items: center; gap: 6px;
+        transition: transform 0.15s, background 0.2s, border-color 0.2s;
+      }
+      .mood-chip:active { transform: scale(0.96); }
+      .mood-chip.selected {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .stat {
+        background: var(--bg);
+        border-radius: 18px;
+        padding: 14px;
+      }
+      .stat-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); }
+      .stat-value { font-family: "Fraunces", serif; font-size: 1.5rem; margin-top: 4px; }
+      .stat-value small { font-size: 0.75rem; color: var(--ink-dim); font-family: "Quicksand"; margin-left: 4px; }
+
+      .section-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.25rem; font-weight: 500;
+        margin: 24px 4px 12px;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        margin-bottom: 12px;
+      }
+
+      /* --- Schedule --- */
+      .schedule-item {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px dashed var(--bg2);
+      }
+      .schedule-item:last-child { border-bottom: none; }
+      .schedule-time {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        color: var(--accent);
+        width: 60px; flex-shrink: 0;
+      }
+      .schedule-body { flex: 1; }
+      .schedule-title { font-weight: 500; }
+      .schedule-desc { font-size: 0.85rem; color: var(--ink-dim); margin-top: 2px; }
+      .check {
+        width: 30px; height: 30px; border-radius: 50%;
+        border: 2px solid var(--bg2);
+        display: inline-flex; align-items: center; justify-content: center;
+        cursor: pointer; flex-shrink: 0;
+        transition: background 0.2s, border-color 0.2s;
+        min-width: 44px; min-height: 44px;
+        background: transparent;
+        margin: -7px;
+        padding: 7px;
+      }
+      .check::after {
+        content: ""; width: 30px; height: 30px; border-radius: 50%;
+        border: 2px solid var(--bg2);
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .check.done::after {
+        background: var(--ok); border-color: var(--ok);
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'><path d='M7.5 13.5l-3-3 1.4-1.4L7.5 10.7l6.6-6.6L15.5 5.5z'/></svg>");
+        background-repeat: no-repeat; background-position: center;
+      }
+
+      /* --- Vet countdown --- */
+      .vet-card {
+        background: linear-gradient(135deg, #ffefe0, #ffd9c0);
+        border-radius: 24px;
+        padding: 22px;
+        margin-bottom: 12px;
+      }
+      .vet-title { font-family: "Fraunces", serif; font-size: 1.15rem; }
+      .vet-date { color: var(--ink-dim); font-size: 0.9rem; margin-top: 2px; }
+      .vet-count {
+        display: flex; gap: 10px; margin-top: 14px;
+      }
+      .vet-count > div {
+        flex: 1; background: rgba(255,255,255,0.7); border-radius: 14px;
+        padding: 10px; text-align: center;
+      }
+      .vet-count b {
+        font-family: "Fraunces", serif; font-size: 1.6rem; font-weight: 500;
+        display: block; color: var(--accent);
+      }
+      .vet-count span { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-dim); }
+
+      /* --- Log --- */
+      .log-input {
+        display: flex; gap: 8px; margin-bottom: 12px;
+      }
+      .log-input input {
+        flex: 1;
+        border: 1.5px solid var(--bg2);
+        background: var(--bg);
+        border-radius: 999px;
+        padding: 12px 16px;
+        font-family: inherit; font-size: 0.95rem;
+        color: var(--ink);
+        outline: none;
+        min-height: 44px;
+      }
+      .log-input input:focus { border-color: var(--accent); }
+      .log-btn {
+        background: var(--accent); color: #fff;
+        border: none; border-radius: 999px;
+        padding: 0 18px;
+        font-family: inherit; font-weight: 500; font-size: 0.95rem;
+        cursor: pointer; min-height: 44px; min-width: 44px;
+      }
+      .log-btn:active { transform: scale(0.96); }
+      .log-list { list-style: none; }
+      .log-list li {
+        padding: 10px 0; border-bottom: 1px dashed var(--bg2);
+        display: flex; align-items: flex-start; gap: 10px;
+      }
+      .log-list li:last-child { border-bottom: none; }
+      .log-list .when { font-size: 0.75rem; color: var(--ink-dim); flex-shrink: 0; width: 78px; padding-top: 3px; }
+      .log-list .what { flex: 1; }
+      .log-empty { color: var(--ink-dim); font-size: 0.9rem; text-align: center; padding: 12px 0; }
+
+      /* --- Photo mood widget --- */
+      .kitty-scene {
+        height: 180px; position: relative;
+        display: flex; align-items: flex-end; justify-content: center;
+        margin-bottom: 8px;
+      }
+      .kitty {
+        width: 140px; height: 140px;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .kitty.wiggle { animation: wiggle 0.6s ease-in-out; }
+      @keyframes wiggle {
+        0%, 100% { transform: rotate(0); }
+        25% { transform: rotate(-4deg); }
+        75% { transform: rotate(4deg); }
+      }
+      .z-particle {
+        position: absolute;
+        font-family: "Fraunces", serif;
+        font-size: 1.2rem; color: var(--accent);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      footer {
+        text-align: center; color: var(--ink-dim);
+        font-size: 0.8rem; margin-top: 30px;
+      }
+
+      /* toast */
+      .toast {
+        position: fixed;
+        bottom: calc(20px + env(safe-area-inset-bottom));
+        left: 50%; transform: translateX(-50%) translateY(20px);
+        background: var(--ink); color: #fff;
+        padding: 10px 18px; border-radius: 999px;
+        font-size: 0.9rem; opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none; z-index: 100;
+      }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href="/" class="back" aria-label="Back home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">
+          <svg class="paw" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="10" r="2"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="6" r="2"/><circle cx="19" cy="10" r="2"/><path d="M12 12c-3.5 0-6 2.5-6 5.5 0 1.4 1.1 2.5 2.5 2.5.9 0 1.5-.4 2-.9.4-.4.9-.6 1.5-.6s1.1.2 1.5.6c.5.5 1.1.9 2 .9 1.4 0 2.5-1.1 2.5-2.5 0-3-2.5-5.5-6-5.5z"/></svg>
+          our Núp
+        </div>
+      </header>
+
+      <div class="hero">
+        <div class="hero-top">
+          <div class="avatar">
+            <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
+              <!-- cat face -->
+              <path d="M20 45c0-15 12-25 30-25s30 10 30 25c0 20-13 35-30 35S20 65 20 45z" fill="#fff"/>
+              <path d="M22 32l8-14 12 8z" fill="#fff"/>
+              <path d="M78 32l-8-14-12 8z" fill="#fff"/>
+              <path d="M25 30l5-8 7 5z" fill="#f4c9b3"/>
+              <path d="M75 30l-5-8-7 5z" fill="#f4c9b3"/>
+              <circle cx="38" cy="50" r="3.5" fill="#3a2e26"/>
+              <circle cx="62" cy="50" r="3.5" fill="#3a2e26"/>
+              <path d="M50 58l-3 3h6z" fill="#d97757"/>
+              <path d="M50 63c-3 0-5-1.5-5-3M50 63c3 0 5-1.5 5-3" stroke="#3a2e26" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div>
+            <div class="hero-title">Núp <span class="heart">♡</span></div>
+            <div class="hero-sub" id="greeting">our little furball</div>
+          </div>
+        </div>
+
+        <div class="kitty-scene" id="kittyScene">
+          <svg class="kitty" id="kittyImg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- body -->
+            <ellipse cx="100" cy="140" rx="55" ry="42" fill="#fff"/>
+            <!-- tail -->
+            <path d="M150 130 Q180 110 175 80 Q170 60 155 65" stroke="#fff" stroke-width="18" stroke-linecap="round" fill="none"/>
+            <!-- head -->
+            <circle cx="100" cy="85" r="42" fill="#fff"/>
+            <!-- ears -->
+            <path d="M70 55 L60 25 L82 42 Z" fill="#fff"/>
+            <path d="M130 55 L140 25 L118 42 Z" fill="#fff"/>
+            <path d="M72 50 L66 32 L80 42 Z" fill="#f4c9b3"/>
+            <path d="M128 50 L134 32 L120 42 Z" fill="#f4c9b3"/>
+            <!-- stripes hint -->
+            <path d="M85 60 Q100 55 115 60" stroke="#e8d9c8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M78 70 Q100 65 122 70" stroke="#e8d9c8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- eyes -->
+            <g id="kittyEyes">
+              <ellipse cx="85" cy="88" rx="5" ry="7" fill="#3a2e26"/>
+              <ellipse cx="115" cy="88" rx="5" ry="7" fill="#3a2e26"/>
+              <circle cx="86" cy="86" r="1.5" fill="#fff"/>
+              <circle cx="116" cy="86" r="1.5" fill="#fff"/>
+            </g>
+            <!-- nose + mouth -->
+            <path d="M100 100 L96 104 L104 104 Z" fill="#d97757"/>
+            <path d="M100 104 C97 108 92 108 90 106 M100 104 C103 108 108 108 110 106" stroke="#3a2e26" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <!-- whiskers -->
+            <path d="M75 100 L60 96 M75 103 L60 105 M125 100 L140 96 M125 103 L140 105" stroke="#3a2e26" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p style="text-align:center; color: var(--ink-dim); font-size: 0.9rem; margin-bottom: 12px;">tap Núp for a little love</p>
+
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="stat-label">age</div>
+            <div class="stat-value" id="ageVal">— <small>yrs</small></div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">weight</div>
+            <div class="stat-value">4.2 <small>kg</small></div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">status</div>
+            <div class="stat-value" style="color: var(--ok); font-size: 1.15rem; padding-top: 6px;">healthy ♡</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">last checkup</div>
+            <div class="stat-value" style="font-size: 1.05rem; padding-top: 8px;">Sep 2025</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">🩺 next vet visit</div>
+      <div class="vet-card">
+        <div class="vet-title">Annual health check</div>
+        <div class="vet-date" id="vetDate">Scheduled: September 15, 2026</div>
+        <div class="vet-count" id="vetCount">
+          <div><b id="vd">--</b><span>days</span></div>
+          <div><b id="vh">--</b><span>hrs</span></div>
+          <div><b id="vm">--</b><span>min</span></div>
+        </div>
+      </div>
+
+      <div class="section-title">☀️ how is he today?</div>
+      <div class="card">
+        <div class="mood-row" id="moodRow">
+          <button class="mood-chip" data-mood="happy">😺 happy</button>
+          <button class="mood-chip" data-mood="sleepy">😴 sleepy</button>
+          <button class="mood-chip" data-mood="hungry">🐟 hungry</button>
+          <button class="mood-chip" data-mood="playful">🎾 playful</button>
+          <button class="mood-chip" data-mood="cuddly">🤍 cuddly</button>
+          <button class="mood-chip" data-mood="grumpy">😾 grumpy</button>
+        </div>
+      </div>
+
+      <div class="section-title">🗓 today's schedule</div>
+      <div class="card" id="scheduleCard">
+        <div class="schedule-item">
+          <div class="schedule-time">07:00</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Morning meal</div>
+            <div class="schedule-desc">wet food + fresh water</div>
+          </div>
+          <button class="check" data-key="s1" aria-label="Mark done"></button>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">12:00</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Play time</div>
+            <div class="schedule-desc">feather wand, 15 min</div>
+          </div>
+          <button class="check" data-key="s2" aria-label="Mark done"></button>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">15:00</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Brush + cuddle</div>
+            <div class="schedule-desc">check for tangles, love him</div>
+          </div>
+          <button class="check" data-key="s3" aria-label="Mark done"></button>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">18:30</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Dinner</div>
+            <div class="schedule-desc">wet food + a few kibbles</div>
+          </div>
+          <button class="check" data-key="s4" aria-label="Mark done"></button>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">22:00</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Litter check</div>
+            <div class="schedule-desc">scoop + top up water</div>
+          </div>
+          <button class="check" data-key="s5" aria-label="Mark done"></button>
+        </div>
+      </div>
+
+      <div class="section-title">📝 Núp's diary</div>
+      <div class="card">
+        <div class="log-input">
+          <input type="text" id="logInput" placeholder="Núp did something cute..." maxlength="140" />
+          <button class="log-btn" id="logBtn" aria-label="Add">＋</button>
+        </div>
+        <ul class="log-list" id="logList"></ul>
+        <div class="log-empty" id="logEmpty">no entries yet — tell me about Núp today ♡</div>
+      </div>
+
+      <footer>made with love for the little one · from home to Italy</footer>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+      // ---------- little helpers ----------
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => document.querySelectorAll(s);
+      const store = {
+        get(k, d) { try { return JSON.parse(localStorage.getItem("nup:" + k)) ?? d; } catch { return d; } },
+        set(k, v) { localStorage.setItem("nup:" + k, JSON.stringify(v)); },
+      };
+      const toast = (msg) => {
+        const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+        clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 1600);
+      };
+
+      // ---------- greeting by hour ----------
+      const h = new Date().getHours();
+      const greet =
+        h < 5  ? "sleeping like a little croissant" :
+        h < 11 ? "just had breakfast, warm and fluffy" :
+        h < 14 ? "napping in a sunbeam" :
+        h < 18 ? "watching birds from the window" :
+        h < 22 ? "asking for one more snack" :
+                 "curled up, dreaming of fish";
+      $("#greeting").textContent = greet;
+
+      // ---------- age ----------
+      // Assuming Núp born approx. 2022. Update if you know exact date.
+      const NUP_BIRTH = new Date("2022-05-01");
+      const ageYears = ((Date.now() - NUP_BIRTH.getTime()) / (365.25 * 864e5)).toFixed(1);
+      $("#ageVal").innerHTML = ageYears + ' <small>yrs</small>';
+
+      // ---------- vet countdown ----------
+      // Store next vet date in localStorage; default to +30 days if unset
+      const stored = store.get("vetDate");
+      let vet = stored ? new Date(stored) : (() => {
+        const d = new Date(); d.setMonth(8, 15); // Sep 15
+        if (d < new Date()) d.setFullYear(d.getFullYear() + 1);
+        return d;
+      })();
+      store.set("vetDate", vet.toISOString());
+      $("#vetDate").textContent = "Scheduled: " + vet.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+      function tickVet() {
+        const diff = vet - new Date();
+        if (diff <= 0) { $("#vd").textContent = 0; $("#vh").textContent = 0; $("#vm").textContent = 0; return; }
+        const d = Math.floor(diff / 864e5);
+        const hh = Math.floor(diff / 36e5) % 24;
+        const mm = Math.floor(diff / 6e4) % 60;
+        $("#vd").textContent = d; $("#vh").textContent = hh; $("#vm").textContent = mm;
+      }
+      tickVet();
+      setInterval(tickVet, 30_000);
+
+      // ---------- moods ----------
+      const savedMood = store.get("mood:" + new Date().toDateString());
+      $$(".mood-chip").forEach((chip) => {
+        if (chip.dataset.mood === savedMood) chip.classList.add("selected");
+        chip.addEventListener("click", () => {
+          $$(".mood-chip").forEach((c) => c.classList.remove("selected"));
+          chip.classList.add("selected");
+          store.set("mood:" + new Date().toDateString(), chip.dataset.mood);
+          toast("mood saved · " + chip.textContent.trim());
+          wiggleKitty();
+        });
+      });
+
+      // ---------- schedule ----------
+      const today = new Date().toDateString();
+      $$(".check").forEach((btn) => {
+        const key = "sched:" + today + ":" + btn.dataset.key;
+        if (store.get(key)) btn.classList.add("done");
+        btn.addEventListener("click", () => {
+          const now = !btn.classList.contains("done");
+          btn.classList.toggle("done", now);
+          store.set(key, now);
+        });
+      });
+
+      // ---------- kitty tap ----------
+      const kitty = $("#kittyImg");
+      const scene = $("#kittyScene");
+      let purrCtx = null;
+      function purr() {
+        try {
+          if (!purrCtx) purrCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (purrCtx.state === "suspended") purrCtx.resume();
+          const o = purrCtx.createOscillator();
+          const g = purrCtx.createGain();
+          o.type = "sine";
+          o.frequency.setValueAtTime(180, purrCtx.currentTime);
+          o.frequency.exponentialRampToValueAtTime(90, purrCtx.currentTime + 0.35);
+          g.gain.setValueAtTime(0, purrCtx.currentTime);
+          g.gain.linearRampToValueAtTime(0.08, purrCtx.currentTime + 0.05);
+          g.gain.exponentialRampToValueAtTime(0.001, purrCtx.currentTime + 0.4);
+          o.connect(g).connect(purrCtx.destination);
+          o.start();
+          o.stop(purrCtx.currentTime + 0.45);
+        } catch (e) {}
+      }
+      function spawnZ() {
+        const z = document.createElement("div");
+        z.className = "z-particle";
+        z.textContent = ["♡", "♪", "purr", "Z", "meow"][Math.floor(Math.random() * 5)];
+        const x = 50 + (Math.random() * 40 - 20);
+        z.style.left = x + "%";
+        z.style.top = "40%";
+        z.style.transform = "translate(-50%, 0)";
+        scene.appendChild(z);
+        z.animate([
+          { opacity: 0, transform: "translate(-50%, 20px) scale(0.7)" },
+          { opacity: 1, transform: "translate(-50%, 0) scale(1)", offset: 0.3 },
+          { opacity: 0, transform: "translate(-50%, -50px) scale(1.2)" },
+        ], { duration: 1400, easing: "ease-out" }).onfinish = () => z.remove();
+      }
+      function wiggleKitty() {
+        kitty.classList.remove("wiggle");
+        void kitty.offsetWidth;
+        kitty.classList.add("wiggle");
+      }
+      kitty.addEventListener("click", () => {
+        wiggleKitty();
+        spawnZ();
+        purr();
+      });
+
+      // ---------- diary log ----------
+      const logInput = $("#logInput"), logList = $("#logList"), logEmpty = $("#logEmpty");
+      function renderLog() {
+        const items = store.get("log", []);
+        logList.innerHTML = "";
+        logEmpty.style.display = items.length ? "none" : "block";
+        items.slice(0, 30).forEach((item, idx) => {
+          const li = document.createElement("li");
+          li.innerHTML = '<div class="when">' + item.when + '</div><div class="what">' + escapeHtml(item.text) + '</div>';
+          logList.appendChild(li);
+        });
+      }
+      function escapeHtml(s) {
+        return s.replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+      }
+      function addLog() {
+        const text = logInput.value.trim();
+        if (!text) return;
+        const items = store.get("log", []);
+        const when = new Date().toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+        items.unshift({ when, text });
+        store.set("log", items.slice(0, 50));
+        logInput.value = "";
+        renderLog();
+        toast("saved to Núp's diary");
+      }
+      $("#logBtn").addEventListener("click", addLog);
+      logInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addLog(); });
+      renderLog();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+# Production deploy: builds a small nginx image containing all 11 pages
+# and serves them on port 80.
+#
+# URLs served:
+#   /                 -> birthday page
+#   /birthday.html    -> birthday page (alias)
+#   /sleep.html, /nup.html, /fiting.html, /christmas.html,
+#   /newyear.html, /valentine.html, /halloween.html,
+#   /miss.html, /women.html, /game.html
+#
+# Usage on the server:
+#   cp example.env .env      (edit values you want)
+#   docker compose up -d --build
+#   docker compose logs -f
+#   docker compose down
+
+services:
+  cards:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NAME: ${NAME:-Stellar}
+        PIC: ${PIC:-sample-pic.jpeg}
+        NICKNAME: ${NICKNAME:-}
+        HBD_MSG: ${HBD_MSG:-}
+        SCROLL_MSG: ${SCROLL_MSG:-}
+        OPEN_DATE: ${OPEN_DATE:-}
+    image: meiot-cards:latest
+    container_name: meiot-cards
+    restart: unless-stopped
+    ports:
+      # Bind port 80 on all interfaces (IPv4 + IPv6) -> container's 8080.
+      # Server must not already run something on :80.
+      - "0.0.0.0:80:8080"
+      - "[::]:80:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/birthday.html"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ---- Dev-only services (hot-reload with Parcel dev server) ----
+  # Start with:  docker compose --profile dev up
+  dev-init:
+    profiles: [dev]
+    build: .
+    env_file: [.env]
+    volumes:
+      - ./src:/app/src
+      - ./local:/app/local
+      - ./builder:/app/builder
+      - /app/node_modules
+    command: npm run init-index-local
+
+  dev:
+    profiles: [dev]
+    build: .
+    ports:
+      - "1234:1234"
+    env_file: [.env]
+    volumes:
+      - ./src:/app/src
+      - ./local:/app/local
+      - ./builder:/app/builder
+      - /app/node_modules
+    command: >
+      npx parcel src/index.html src/sleep.html src/nup.html src/fiting.html
+      src/christmas.html src/newyear.html src/valentine.html src/halloween.html
+      src/miss.html src/women.html src/game.html --host 0.0.0.0
+    depends_on:
+      dev-init:
+        condition: service_completed_successfully
