@@ -15,19 +15,22 @@ set -u
 BASE="${1:-${BASE:-https://meiot.site}}"
 BASE="${BASE%/}"   # strip trailing slash
 
+# Currently-deployed pages. Seasonal pages are commented out until their day
+# is closer; uncomment when you deploy them.
 PAGES=(
   ""                # root should serve the birthday page
   "birthday.html"
   "sleep.html"
   "nup.html"
   "fiting.html"
-  "christmas.html"
-  "newyear.html"
-  "valentine.html"
-  "halloween.html"
   "miss.html"
-  "women.html"
   "game.html"
+  # ---- seasonal (not yet deployed) ----
+  # "christmas.html"
+  # "newyear.html"
+  # "valentine.html"
+  # "halloween.html"
+  # "women.html"
 )
 
 # Colors (auto-off if not a TTY)
