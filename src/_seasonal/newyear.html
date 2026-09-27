@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a1a" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>New Year · together in spirit</title>
+    <meta name="description" content="Countdown to midnight, wishes for the year ahead." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg1: #05051a;
+        --bg2: #0a0a25;
+        --bg3: #1a0e3a;
+        --gold: #f4c14b;
+        --gold-2: #ffd97a;
+        --pink: #ff8fa3;
+        --purple: #a68bff;
+        --text: #f4f0ff;
+        --text-dim: #a89fc9;
+      }
+      html, body { min-height: 100dvh; overflow-x: hidden; }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        position: relative;
+      }
+      #fx {
+        position: fixed; inset: 0;
+        pointer-events: none; z-index: 1;
+      }
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 2; }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; font-size: 1rem;
+        color: var(--gold); letter-spacing: 0.15em;
+      }
+
+      /* --- Year display --- */
+      .year-hero {
+        text-align: center;
+        padding: 30px 0 20px;
+      }
+      .year-eyebrow {
+        font-size: 0.75rem; letter-spacing: 0.4em; text-transform: uppercase;
+        color: var(--gold); margin-bottom: 12px;
+      }
+      .year-number {
+        font-family: "Fraunces", serif;
+        font-size: clamp(4.5rem, 22vw, 8rem);
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: 0.02em;
+        background: linear-gradient(135deg, var(--gold), var(--pink), var(--purple));
+        -webkit-background-clip: text; background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 0 40px rgba(244,193,75,0.3));
+      }
+      .year-sub {
+        color: var(--text-dim); font-size: 0.95rem; margin-top: 10px;
+      }
+
+      /* --- Countdown --- */
+      .countdown {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin: 24px auto;
+        max-width: 500px;
+      }
+      .cd-box {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 18px;
+        padding: 16px 6px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+      }
+      .cd-box::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      }
+      .cd-num {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.8rem, 7vw, 2.6rem);
+        font-weight: 500;
+        color: var(--gold-2);
+        line-height: 1;
+      }
+      .cd-label {
+        font-size: 0.7rem; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--text-dim);
+        margin-top: 6px;
+      }
+
+      /* --- Fireworks button --- */
+      .midnight-btn {
+        display: block; margin: 0 auto 24px;
+        background: linear-gradient(135deg, var(--gold), var(--pink));
+        border: none; border-radius: 999px;
+        padding: 14px 26px;
+        font-family: inherit; font-weight: 600; font-size: 1rem;
+        color: var(--bg1);
+        cursor: pointer;
+        box-shadow: 0 8px 30px rgba(244,193,75,0.4);
+        min-height: 48px;
+        transition: transform 0.15s;
+      }
+      .midnight-btn:active { transform: scale(0.96); }
+
+      /* --- Section --- */
+      .section-title {
+        font-family: "Fraunces", serif; font-size: 1.15rem;
+        margin: 24px 4px 12px;
+        display: flex; align-items: center; gap: 8px;
+      }
+
+      /* --- Resolutions --- */
+      .card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 12px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .res-input {
+        display: flex; gap: 8px; margin-bottom: 12px;
+      }
+      .res-input input {
+        flex: 1;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-family: inherit; font-size: 0.95rem;
+        outline: none;
+        min-height: 44px;
+      }
+      .res-input input::placeholder { color: var(--text-dim); }
+      .res-input input:focus { border-color: var(--gold); }
+      .res-input button {
+        background: var(--gold); color: var(--bg1);
+        border: none; border-radius: 12px;
+        padding: 0 18px;
+        font-family: inherit; font-weight: 600;
+        cursor: pointer; min-height: 44px; min-width: 44px;
+      }
+      .res-list { list-style: none; }
+      .res-list li {
+        padding: 12px 0;
+        border-bottom: 1px dashed rgba(255,255,255,0.08);
+        display: flex; align-items: center; gap: 12px;
+      }
+      .res-list li:last-child { border-bottom: none; }
+      .res-check {
+        width: 24px; height: 24px; border-radius: 50%;
+        border: 2px solid rgba(255,255,255,0.25);
+        cursor: pointer; flex-shrink: 0;
+        background: transparent;
+        display: flex; align-items: center; justify-content: center;
+        min-width: 44px; min-height: 44px;
+        margin: -10px;
+        padding: 10px;
+      }
+      .res-check::before {
+        content: ""; width: 24px; height: 24px; border-radius: 50%;
+        border: 2px solid rgba(255,255,255,0.25);
+        display: block;
+      }
+      .res-list li.done .res-check::before {
+        background: var(--gold); border-color: var(--gold);
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M7.5 13.5l-3-3 1.4-1.4L7.5 10.7l6.6-6.6L15.5 5.5z' fill='%2305051a'/></svg>");
+        background-repeat: no-repeat; background-position: center;
+      }
+      .res-list li.done .res-text {
+        text-decoration: line-through; color: var(--text-dim);
+      }
+      .res-text { flex: 1; }
+      .res-del {
+        background: transparent; border: none;
+        color: var(--text-dim); cursor: pointer;
+        font-size: 1.1rem; padding: 8px;
+        min-width: 44px; min-height: 44px;
+      }
+
+      /* --- Kiss at midnight --- */
+      .kiss-card {
+        background: linear-gradient(135deg, rgba(255,143,163,0.15), rgba(166,139,255,0.15));
+        border: 1px solid rgba(255,143,163,0.3);
+        border-radius: 24px;
+        padding: 24px;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+      .kiss-title { font-family: "Fraunces", serif; font-size: 1.2rem; margin-bottom: 8px; }
+      .kiss-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; }
+      .kiss-clock {
+        font-family: "Fraunces", serif; font-size: 3rem;
+        color: var(--pink);
+        margin: 12px 0;
+        letter-spacing: 0.05em;
+      }
+      .kiss-msg {
+        font-family: "Fraunces", serif; font-size: 1.05rem; font-style: italic;
+        color: var(--gold-2); line-height: 1.6;
+      }
+
+      footer {
+        text-align: center; color: var(--text-dim);
+        font-size: 0.8rem; margin-top: 30px;
+      }
+
+      /* MIDNIGHT SEQUENCE */
+      .flash-white {
+        position: fixed; inset: 0;
+        background: #fff; opacity: 0;
+        pointer-events: none; z-index: 100;
+        transition: opacity 0.3s;
+      }
+      .flash-white.on { opacity: 0.6; }
+    </style>
+  </head>
+  <body>
+    <canvas id="fx"></canvas>
+    <div class="flash-white" id="flash"></div>
+
+    <div class="container">
+      <header>
+        <a href="/" class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">✦ FELICE ANNO ✦</div>
+      </header>
+
+      <section class="year-hero">
+        <div class="year-eyebrow">welcome to</div>
+        <div class="year-number" id="yearNum">2027</div>
+        <div class="year-sub">a new page, together in spirit</div>
+      </section>
+
+      <div class="countdown">
+        <div class="cd-box"><div class="cd-num" id="cdD">--</div><div class="cd-label">days</div></div>
+        <div class="cd-box"><div class="cd-num" id="cdH">--</div><div class="cd-label">hours</div></div>
+        <div class="cd-box"><div class="cd-num" id="cdM">--</div><div class="cd-label">min</div></div>
+        <div class="cd-box"><div class="cd-num" id="cdS">--</div><div class="cd-label">sec</div></div>
+      </div>
+
+      <button class="midnight-btn" id="fireBtn">🎆 launch fireworks</button>
+
+      <div class="section-title">💫 wishes for the new year</div>
+      <div class="card">
+        <div class="res-input">
+          <input type="text" id="resInput" placeholder="something to grow, dream, or heal..." maxlength="140" />
+          <button id="resAdd" aria-label="Add">＋</button>
+        </div>
+        <ul class="res-list" id="resList"></ul>
+      </div>
+
+      <div class="kiss-card">
+        <div class="kiss-title">🥂 midnight in Milan</div>
+        <div class="kiss-sub">where you are, right now</div>
+        <div class="kiss-clock" id="milanClock">--:--:--</div>
+        <div class="kiss-msg">Wherever midnight finds you, save one kiss for me. I'll send one back at midnight my time. ♡</div>
+      </div>
+
+      <footer>from home to Italy · one new year, two hearts</footer>
+    </div>
+
+    <script type="module">
+      // ---------- year & target ----------
+      const now = new Date();
+      let target = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0);
+      // if we're already in january, count to next year
+      document.getElementById("yearNum").textContent = target.getFullYear();
+
+      // ---------- countdown ----------
+      function tick() {
+        const diff = target - new Date();
+        if (diff <= 0) {
+          ["cdD","cdH","cdM","cdS"].forEach((id) => document.getElementById(id).textContent = "0");
+          triggerMidnight();
+          return;
+        }
+        const d = Math.floor(diff / 864e5);
+        const h = Math.floor(diff / 36e5) % 24;
+        const m = Math.floor(diff / 6e4) % 60;
+        const s = Math.floor(diff / 1000) % 60;
+        document.getElementById("cdD").textContent = d;
+        document.getElementById("cdH").textContent = String(h).padStart(2,"0");
+        document.getElementById("cdM").textContent = String(m).padStart(2,"0");
+        document.getElementById("cdS").textContent = String(s).padStart(2,"0");
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      // ---------- Milan clock ----------
+      function milanTick() {
+        try {
+          const s = new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/Rome" });
+          document.getElementById("milanClock").textContent = s;
+        } catch { /* fallback */ }
+      }
+      milanTick();
+      setInterval(milanTick, 1000);
+
+      // ---------- fireworks canvas ----------
+      const canvas = document.getElementById("fx");
+      const ctx = canvas.getContext("2d");
+      let W, H;
+      function resize() {
+        W = window.innerWidth; H = window.innerHeight;
+        canvas.width = W * devicePixelRatio;
+        canvas.height = H * devicePixelRatio;
+        canvas.style.width = W + "px";
+        canvas.style.height = H + "px";
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      }
+      resize();
+      window.addEventListener("resize", resize);
+
+      const particles = [];
+      const colors = ["#f4c14b", "#ff8fa3", "#a68bff", "#7bc9e2", "#ffd97a", "#ffffff"];
+
+      function explode(x, y, color) {
+        const count = 60 + Math.floor(Math.random() * 40);
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count;
+          const speed = 2 + Math.random() * 4;
+          particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 1,
+            color,
+            size: 2 + Math.random() * 2,
+          });
+        }
+      }
+
+      function shoot() {
+        const x = W * (0.2 + Math.random() * 0.6);
+        const y = H * (0.2 + Math.random() * 0.3);
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        // rocket trail
+        const trail = { x: x, y: H, vx: 0, vy: -(6 + Math.random() * 3), tx: x, ty: y, color, trail: true, life: 1 };
+        particles.push(trail);
+      }
+
+      function frame() {
+        ctx.fillStyle = "rgba(5,5,26,0.18)";
+        ctx.fillRect(0, 0, W, H);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          if (p.trail) {
+            p.x += p.vx; p.y += p.vy;
+            ctx.beginPath();
+            ctx.fillStyle = p.color;
+            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+            if (p.y <= p.ty) {
+              explode(p.x, p.y, p.color);
+              particles.splice(i, 1);
+            }
+          } else {
+            p.x += p.vx; p.y += p.vy;
+            p.vy += 0.08; // gravity
+            p.vx *= 0.99;
+            p.life -= 0.014;
+            if (p.life <= 0) { particles.splice(i, 1); continue; }
+            ctx.beginPath();
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+      frame();
+
+      // audio for fireworks
+      let actx = null;
+      function ensureA() {
+        if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+        if (actx.state === "suspended") actx.resume();
+        return actx;
+      }
+      function boom() {
+        try {
+          const c = ensureA();
+          const dur = 0.6;
+          const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+          const d = buf.getChannelData(0);
+          for (let i = 0; i < d.length; i++) {
+            d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+          }
+          const src = c.createBufferSource();
+          src.buffer = buf;
+          const g = c.createGain();
+          g.gain.value = 0.15;
+          const lp = c.createBiquadFilter();
+          lp.type = "lowpass"; lp.frequency.value = 700;
+          src.connect(lp).connect(g).connect(c.destination);
+          src.start();
+        } catch {}
+      }
+
+      document.getElementById("fireBtn").addEventListener("click", () => {
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => { shoot(); boom(); }, i * 400);
+        }
+      });
+
+      // ---------- resolutions ----------
+      const store = {
+        get(k, d) { try { return JSON.parse(localStorage.getItem("ny:" + k)) ?? d; } catch { return d; } },
+        set(k, v) { localStorage.setItem("ny:" + k, JSON.stringify(v)); },
+      };
+      const resInput = document.getElementById("resInput");
+      const resList = document.getElementById("resList");
+      function escapeHtml(s) { return s.replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+      function render() {
+        const items = store.get("res", []);
+        resList.innerHTML = items.map((r, i) =>
+          '<li class="' + (r.done ? "done" : "") + '" data-i="' + i + '">' +
+            '<button class="res-check" aria-label="Toggle done"></button>' +
+            '<span class="res-text">' + escapeHtml(r.text) + '</span>' +
+            '<button class="res-del" aria-label="Delete">×</button>' +
+          '</li>'
+        ).join("");
+        resList.querySelectorAll("li").forEach((li) => {
+          const idx = parseInt(li.dataset.i);
+          li.querySelector(".res-check").addEventListener("click", () => {
+            const arr = store.get("res", []);
+            arr[idx].done = !arr[idx].done;
+            store.set("res", arr); render();
+          });
+          li.querySelector(".res-del").addEventListener("click", () => {
+            const arr = store.get("res", []);
+            arr.splice(idx, 1); store.set("res", arr); render();
+          });
+        });
+      }
+      function add() {
+        const v = resInput.value.trim();
+        if (!v) return;
+        const arr = store.get("res", []);
+        arr.unshift({ text: v, done: false });
+        store.set("res", arr.slice(0, 30));
+        resInput.value = "";
+        render();
+      }
+      document.getElementById("resAdd").addEventListener("click", add);
+      resInput.addEventListener("keydown", (e) => { if (e.key === "Enter") add(); });
+      render();
+
+      // ---------- midnight trigger ----------
+      let triggered = false;
+      function triggerMidnight() {
+        if (triggered) return;
+        triggered = true;
+        document.getElementById("flash").classList.add("on");
+        setTimeout(() => document.getElementById("flash").classList.remove("on"), 400);
+        const grand = setInterval(() => { shoot(); boom(); }, 400);
+        setTimeout(() => clearInterval(grand), 15000);
+      }
+    </script>
+  </body>
+</html>

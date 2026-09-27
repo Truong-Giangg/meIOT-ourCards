@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#2a0a1a" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>Happy Valentine's Day</title>
-    <meta name="description" content="One hundred reasons, one heart." />
+    <title>Valentine's · coming soon</title>
+    <meta name="description" content="Getting a hundred hearts ready. Come back Feb 14." />
 
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,1,300;9..144,0,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
@@ -15,470 +15,182 @@
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
-        --bg1: #1a0510;
-        --bg2: #2a0a1a;
-        --bg3: #3d1128;
-        --rose: #ff8ba3;
-        --rose-dark: #d55e7a;
-        --pink: #ffb8c8;
-        --gold: #f4c14b;
-        --cream: #fff2ea;
-        --text: #fff2ea;
-        --text-dim: #d6a8b8;
+        --bg1: #1a0510; --bg2: #2a0a1a; --bg3: #3d1128;
+        --rose: #ff8ba3; --rose-dark: #d55e7a; --pink: #ffb8c8; --gold: #f4c14b;
+        --cream: #fff2ea; --text: #fff2ea; --text-dim: #d6a8b8;
       }
       html, body { min-height: 100dvh; overflow-x: hidden; }
       body {
-        font-family: "Inter", system-ui, sans-serif;
-        color: var(--text);
+        font-family: "Inter", system-ui, sans-serif; color: var(--text);
         background:
           radial-gradient(700px 400px at 90% 0%, rgba(255,139,163,0.18), transparent),
-          radial-gradient(700px 400px at 10% 100%, rgba(244,193,75,0.10), transparent),
           linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg3));
         min-height: 100dvh;
-        -webkit-font-smoothing: antialiased;
-        -webkit-tap-highlight-color: transparent;
-        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+        display: flex; align-items: center; justify-content: center;
         position: relative;
       }
-      #fx {
-        position: fixed; inset: 0;
-        pointer-events: none; z-index: 1;
-      }
-      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 2; }
+      #fx { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
 
-      header {
-        display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 16px;
+      .card {
+        max-width: 480px; width: 100%; text-align: center;
+        position: relative; z-index: 2;
+        padding: 32px 24px 40px;
       }
       .back {
+        position: absolute; top: 20px; left: 20px;
         display: inline-flex; align-items: center; gap: 6px;
         color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
         padding: 8px 12px; border-radius: 999px;
         background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-        min-height: 40px;
-      }
-      .brand {
-        font-family: "Fraunces", serif; color: var(--rose);
-        letter-spacing: 0.15em; font-size: 0.95rem;
-        font-style: italic;
+        min-height: 40px; z-index: 3;
       }
 
-      /* Hero */
-      .hero {
-        text-align: center;
-        padding: 24px 0 8px;
+      .heart-big {
+        width: 100px; height: 100px; margin: 0 auto 20px;
+        animation: beat 1.4s ease-in-out infinite;
+        filter: drop-shadow(0 0 24px rgba(255,139,163,0.5));
       }
-      .hero .h1 {
+      @keyframes beat {
+        0%, 100% { transform: scale(1); }
+        20%, 60% { transform: scale(1.15); }
+      }
+      .heart-big svg { width: 100%; height: 100%; }
+
+      .eyebrow {
+        font-size: 0.72rem; letter-spacing: 0.4em; text-transform: uppercase;
+        color: var(--rose); margin-bottom: 10px;
+      }
+      h1 {
         font-family: "Fraunces", serif;
-        font-size: clamp(2.4rem, 9vw, 3.6rem);
-        font-weight: 300; line-height: 1.05;
+        font-size: clamp(2rem, 8vw, 2.8rem); font-weight: 400;
+        margin-bottom: 8px;
       }
-      .hero .h1 em {
+      h1 em {
         font-style: italic;
         background: linear-gradient(135deg, var(--rose), var(--pink), var(--gold));
         -webkit-background-clip: text; background-clip: text; color: transparent;
       }
-      .hero .h2 {
-        font-family: "Fraunces", serif;
-        font-style: italic;
-        color: var(--text-dim);
-        margin-top: 8px; font-size: 1rem;
+      .lead {
+        color: var(--text-dim); font-size: 0.95rem;
+        margin-bottom: 22px; line-height: 1.5;
       }
-
-      /* Together counter */
-      .together {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,139,163,0.25);
-        border-radius: 24px;
-        padding: 22px;
-        margin: 24px 0 16px;
-        text-align: center;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+      .countdown {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 8px; margin-bottom: 22px;
       }
-      .together-label {
-        font-size: 0.75rem; letter-spacing: 0.35em;
-        text-transform: uppercase; color: var(--rose);
-        margin-bottom: 12px;
-      }
-      .together-num {
-        font-family: "Fraunces", serif;
-        font-size: clamp(3.5rem, 15vw, 5.5rem);
-        font-weight: 300;
-        color: var(--pink);
-        line-height: 1;
-      }
-      .together-sub {
-        color: var(--text-dim); font-size: 0.9rem; margin-top: 8px;
-      }
-      .together-edit {
-        margin-top: 12px;
-        background: transparent; border: 1px solid rgba(255,255,255,0.2);
-        color: var(--rose);
-        padding: 6px 14px; border-radius: 999px;
-        font-family: inherit; font-size: 0.8rem;
-        cursor: pointer; min-height: 32px;
-      }
-
-      /* Section */
-      .section-title {
-        font-family: "Fraunces", serif; font-size: 1.15rem;
-        margin: 24px 4px 12px;
-        display: flex; align-items: center; gap: 8px;
-      }
-
-      /* Reasons carousel */
-      .reasons {
-        background: linear-gradient(135deg, rgba(255,139,163,0.15), rgba(244,193,75,0.08));
-        border: 1px solid rgba(255,139,163,0.3);
-        border-radius: 28px;
-        padding: 28px 20px;
-        margin-bottom: 16px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        min-height: 260px;
-        display: flex; flex-direction: column; justify-content: center;
-      }
-      .reason-num {
-        font-family: "Fraunces", serif;
-        font-size: 4rem; font-weight: 300;
-        color: rgba(255,139,163,0.25);
-        line-height: 1;
-        margin-bottom: 8px;
-      }
-      .reason-text {
-        font-family: "Fraunces", serif;
-        font-size: 1.35rem; font-weight: 400;
-        line-height: 1.4;
-        color: var(--cream);
-        min-height: 3em;
-      }
-      .reason-nav {
-        display: flex; justify-content: center; gap: 12px;
-        margin-top: 20px;
-      }
-      .reason-btn {
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.15);
-        color: var(--rose);
-        width: 44px; height: 44px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; font-size: 1.2rem;
-      }
-      .reason-heart-btn {
-        background: linear-gradient(135deg, var(--rose), var(--rose-dark));
-        border: none; color: #fff;
-        width: 52px; height: 52px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 6px 20px rgba(255,139,163,0.4);
-      }
-      .reason-heart-btn:active { transform: scale(0.92); }
-      .reason-count {
-        color: var(--text-dim); font-size: 0.8rem; margin-top: 10px;
-      }
-
-      /* Scratch card */
-      .scratch-card {
+      .cd {
         background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 24px;
-        padding: 20px;
-        margin-bottom: 16px;
+        border: 1px solid rgba(255,139,163,0.2);
+        border-radius: 14px; padding: 12px 4px;
+        backdrop-filter: blur(8px);
       }
-      .scratch-title { font-family: "Fraunces", serif; font-size: 1.1rem; margin-bottom: 6px; }
-      .scratch-sub { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 14px; }
-      .scratch-wrap {
-        position: relative;
-        width: 100%; height: 200px;
-        border-radius: 18px; overflow: hidden;
-        background: linear-gradient(135deg, rgba(255,139,163,0.2), rgba(244,193,75,0.15));
-        display: flex; align-items: center; justify-content: center;
-        padding: 16px;
-        text-align: center;
-      }
-      .scratch-msg {
-        font-family: "Fraunces", serif; font-size: 1.1rem;
-        line-height: 1.5;
-        color: var(--pink);
-        font-style: italic;
-      }
-      .scratch-canvas {
-        position: absolute; inset: 0;
-        touch-action: none;
-        cursor: crosshair;
-      }
+      .cd-num { font-family: "Fraunces", serif; font-size: clamp(1.4rem, 5.5vw, 1.9rem); color: var(--pink); }
+      .cd-lbl { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 6px; }
 
-      /* Love letter */
-      .letter {
-        background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(244,193,75,0.05));
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 24px;
-        padding: 24px;
-        margin-bottom: 16px;
-        font-family: "Fraunces", serif;
-        font-size: 1.05rem; line-height: 1.75;
-        font-weight: 300;
-        color: var(--cream);
+      .note {
+        font-family: "Fraunces", serif; font-style: italic;
+        color: var(--cream); font-size: 1rem; line-height: 1.6;
+        max-width: 32ch; margin: 0 auto;
       }
-      .letter p + p { margin-top: 12px; }
-      .letter em { color: var(--rose); font-style: italic; }
-      .letter .sig {
-        text-align: right; margin-top: 18px;
-        color: var(--rose); font-style: italic; font-size: 0.95rem;
-      }
-
-      footer {
-        text-align: center; color: var(--text-dim);
-        font-size: 0.8rem; margin-top: 30px;
-      }
+      footer { margin-top: 24px; color: var(--text-dim); font-size: 0.8rem; }
     </style>
   </head>
   <body>
     <canvas id="fx"></canvas>
+    <a href="/" class="back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      home
+    </a>
 
-    <div class="container">
-      <header>
-        <a href="/" class="back">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          home
-        </a>
-        <div class="brand">◆ San Valentino ◆</div>
-      </header>
-
-      <section class="hero">
-        <div class="h1">Happy <em>Valentine's</em>, my love</div>
-        <div class="h2">even across a continent, you're my everyday</div>
-      </section>
-
-      <div class="together">
-        <div class="together-label">days together</div>
-        <div class="together-num" id="daysNum">0</div>
-        <div class="together-sub" id="daysSince">since we became <em>us</em></div>
-        <button class="together-edit" id="editStart">set start date</button>
+    <main class="card">
+      <div class="heart-big" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="url(#g)" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff8ba3"/>
+              <stop offset="100%" stop-color="#d55e7a"/>
+            </linearGradient>
+          </defs>
+          <path d="M12 21s-7-5.5-9-10a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 10-9 10z"/>
+        </svg>
       </div>
 
-      <div class="section-title">💗 reasons I love you</div>
-      <div class="reasons">
-        <div class="reason-num" id="reasonNum">01</div>
-        <div class="reason-text" id="reasonText">Loading...</div>
-        <div class="reason-nav">
-          <button class="reason-btn" id="prevBtn" aria-label="Previous">‹</button>
-          <button class="reason-heart-btn" id="nextBtn" aria-label="Next">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-5.5-9-10a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 10-9 10z"/></svg>
-          </button>
-          <button class="reason-btn" id="randBtn" aria-label="Random">⤾</button>
-        </div>
-        <div class="reason-count"><span id="curIdx">1</span> of <span id="totalIdx">--</span></div>
+      <div class="eyebrow">warming up for</div>
+      <h1><em>Valentine's</em> Day</h1>
+      <p class="lead">A hundred reasons are still being written. Come back on Feb 14 and I'll have them ready for you.</p>
+
+      <div class="countdown">
+        <div class="cd"><div class="cd-num" id="d">--</div><div class="cd-lbl">days</div></div>
+        <div class="cd"><div class="cd-num" id="h">--</div><div class="cd-lbl">hrs</div></div>
+        <div class="cd"><div class="cd-num" id="m">--</div><div class="cd-lbl">min</div></div>
+        <div class="cd"><div class="cd-num" id="s">--</div><div class="cd-lbl">sec</div></div>
       </div>
 
-      <div class="section-title">✨ scratch to reveal</div>
-      <div class="scratch-card">
-        <div class="scratch-title">A secret just for today</div>
-        <div class="scratch-sub">drag your finger across to reveal</div>
-        <div class="scratch-wrap">
-          <div class="scratch-msg" id="scratchMsg">You are the reason I still believe in ordinary miracles.</div>
-          <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
-        </div>
-      </div>
-
-      <div class="section-title">💌 a letter</div>
-      <div class="letter">
-        <p>Tình yêu à,</p>
-        <p>You know what I love most? That you're mine even when you're 9,000 kilometers away. That the little morning texts, the "look what I saw today" pictures, the tired video calls when you've been studying too long — all of it counts. All of it is <em>us</em>.</p>
-        <p>You are brave in ways I don't always tell you. You crossed a continent to build a future for us, and every hard day you don't quit is a love letter to me.</p>
-        <p>So today, wherever you are — in a café, in the library, walking under some pretty Italian streetlight — know this: I love you like the first day, and more.</p>
-        <p class="sig">— tuo per sempre ♡</p>
-      </div>
-
-      <footer>with every heartbeat · from home to yours</footer>
-    </div>
+      <p class="note">"You are my everyday, not just my Valentine." ♡</p>
+      <footer>meiot.site · check back on Feb 14</footer>
+    </main>
 
     <script type="module">
-      const store = {
-        get(k, d) { try { return JSON.parse(localStorage.getItem("val:" + k)) ?? d; } catch { return d; } },
-        set(k, v) { localStorage.setItem("val:" + k, JSON.stringify(v)); },
-      };
+      function nextTarget() {
+        const now = new Date();
+        let t = new Date(now.getFullYear(), 1, 14);
+        if (t < now) t = new Date(now.getFullYear() + 1, 1, 14);
+        return t;
+      }
+      const target = nextTarget();
+      function tick() {
+        const diff = target - new Date();
+        if (diff <= 0) { ["d","h","m","s"].forEach(id => document.getElementById(id).textContent = 0); return; }
+        document.getElementById("d").textContent = Math.floor(diff / 864e5);
+        document.getElementById("h").textContent = String(Math.floor(diff / 36e5) % 24).padStart(2,"0");
+        document.getElementById("m").textContent = String(Math.floor(diff / 6e4) % 60).padStart(2,"0");
+        document.getElementById("s").textContent = String(Math.floor(diff / 1000) % 60).padStart(2,"0");
+      }
+      tick(); setInterval(tick, 1000);
 
-      // ---------- hearts background ----------
-      const cvs = document.getElementById("fx");
-      const cx = cvs.getContext("2d");
-      let W, H;
+      // Floating hearts
+      const cvs = document.getElementById("fx"); const ctx = cvs.getContext("2d");
+      let W, H, hearts = [];
       function resize() {
         W = window.innerWidth; H = window.innerHeight;
-        cvs.width = W * devicePixelRatio;
-        cvs.height = H * devicePixelRatio;
-        cvs.style.width = W + "px";
-        cvs.style.height = H + "px";
-        cx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        cvs.width = W * devicePixelRatio; cvs.height = H * devicePixelRatio;
+        cvs.style.width = W + "px"; cvs.style.height = H + "px";
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
       }
-      resize();
-      window.addEventListener("resize", resize);
-
-      const hearts = [];
-      function spawnHeart(x, y, big = false) {
-        for (let i = 0; i < (big ? 14 : 1); i++) {
-          hearts.push({
-            x: x + (Math.random() - 0.5) * (big ? 60 : 20),
-            y: y + (Math.random() - 0.5) * 20,
-            vx: (Math.random() - 0.5) * (big ? 3 : 0.4),
-            vy: -1 - Math.random() * (big ? 3 : 1),
-            life: 1,
-            size: 6 + Math.random() * 10,
-            color: ["#ff8ba3", "#ffb8c8", "#f4c14b", "#ffffff"][Math.floor(Math.random() * 4)],
-          });
-        }
-      }
-
-      // ambient drifting hearts
-      setInterval(() => {
-        if (hearts.length < 40) spawnHeart(Math.random() * W, H + 20);
-      }, 1500);
-
-      function drawHeart(ctx, x, y, size, color) {
-        ctx.beginPath();
+      resize(); window.addEventListener("resize", resize);
+      function drawHeart(x, y, s, color, alpha) {
+        ctx.globalAlpha = alpha;
         ctx.fillStyle = color;
-        ctx.moveTo(x, y + size / 4);
-        ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + size / 4);
-        ctx.bezierCurveTo(x - size / 2, y + size / 1.7, x, y + size / 1.3, x, y + size);
-        ctx.bezierCurveTo(x, y + size / 1.3, x + size / 2, y + size / 1.7, x + size / 2, y + size / 4);
-        ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + size / 4);
+        ctx.beginPath();
+        ctx.moveTo(x, y + s/4);
+        ctx.bezierCurveTo(x, y, x-s/2, y, x-s/2, y+s/4);
+        ctx.bezierCurveTo(x-s/2, y+s/1.7, x, y+s/1.3, x, y+s);
+        ctx.bezierCurveTo(x, y+s/1.3, x+s/2, y+s/1.7, x+s/2, y+s/4);
+        ctx.bezierCurveTo(x+s/2, y, x, y, x, y+s/4);
         ctx.fill();
+        ctx.globalAlpha = 1;
       }
-
+      setInterval(() => {
+        if (hearts.length < 30) hearts.push({
+          x: Math.random() * W, y: H + 20,
+          vy: -0.5 - Math.random() * 0.8, vx: (Math.random() - 0.5) * 0.4,
+          s: 6 + Math.random() * 10, life: 1,
+          color: ["#ff8ba3", "#ffb8c8", "#f4c14b"][Math.floor(Math.random() * 3)],
+        });
+      }, 400);
       function frame() {
-        cx.clearRect(0, 0, W, H);
+        ctx.clearRect(0, 0, W, H);
         for (let i = hearts.length - 1; i >= 0; i--) {
           const h = hearts[i];
-          h.x += h.vx; h.y += h.vy;
-          h.vy += 0.03;
-          h.life -= 0.005;
-          if (h.life <= 0 || h.y > H + 40) { hearts.splice(i, 1); continue; }
-          cx.globalAlpha = Math.min(0.8, h.life);
-          drawHeart(cx, h.x, h.y, h.size, h.color);
-          cx.globalAlpha = 1;
+          h.x += h.vx; h.y += h.vy; h.life -= 0.003;
+          if (h.life <= 0 || h.y < -20) { hearts.splice(i, 1); continue; }
+          drawHeart(h.x, h.y, h.s, h.color, Math.min(0.6, h.life));
         }
         requestAnimationFrame(frame);
       }
       frame();
-
-      // ---------- days together ----------
-      function updateDays() {
-        const start = store.get("startDate");
-        const d = new Date(start || "2022-01-01");
-        const diff = Math.max(0, Math.floor((new Date() - d) / 864e5));
-        document.getElementById("daysNum").textContent = diff.toLocaleString();
-        document.getElementById("daysSince").innerHTML = "since " + d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-      }
-      updateDays();
-      document.getElementById("editStart").addEventListener("click", () => {
-        const cur = store.get("startDate") || "2022-01-01";
-        const val = prompt("When did we become us? (YYYY-MM-DD)", cur);
-        if (val && /^\d{4}-\d{2}-\d{2}$/.test(val)) {
-          store.set("startDate", val);
-          updateDays();
-        }
-      });
-
-      // ---------- reasons ----------
-      const reasons = [
-        "the way you laugh with your whole face",
-        "how you always ask if I ate",
-        "the tiny voice you use with Núp",
-        "that you never stopped believing in us",
-        "how you turn ordinary days into memories",
-        "the way you fight for what you love",
-        "your kindness, even when you're tired",
-        "the songs you hum when you're happy",
-        "your stubborn, brave, brilliant heart",
-        "the little poems in your texts",
-        "how you make everywhere feel like home",
-        "the way you dream, loudly and honestly",
-        "you cried at that movie and I loved you more",
-        "your hand, still my favorite thing to hold",
-        "you make me want to be better, quietly",
-        "the way you say my name in Vietnamese",
-        "you remember everything that matters to me",
-        "you would move a continent for us — and did",
-        "you make bad coffee mornings feel worth it",
-        "your soul is warm even when the world isn't",
-        "you loved Núp on sight, and me even faster",
-        "you say hard truths gently",
-        "you dance in the kitchen, always",
-        "your patience with my worst moods",
-        "you built your dreams into a plan and left",
-        "you never make me feel small",
-        "you find beauty in gray days",
-        "your handwriting looks like a hug",
-        "you say sorry, and mean it, and change",
-        "you make me feel chosen every single day",
-      ];
-      let idx = 0;
-      document.getElementById("totalIdx").textContent = reasons.length;
-      function showReason(i) {
-        idx = (i + reasons.length) % reasons.length;
-        document.getElementById("reasonNum").textContent = String(idx + 1).padStart(2, "0");
-        document.getElementById("curIdx").textContent = idx + 1;
-        const el = document.getElementById("reasonText");
-        el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: "forwards" }).onfinish = () => {
-          el.textContent = reasons[idx];
-          el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300, fill: "forwards" });
-        };
-      }
-      showReason(0);
-      document.getElementById("nextBtn").addEventListener("click", () => {
-        showReason(idx + 1);
-        spawnHeart(W / 2, H * 0.5, true);
-      });
-      document.getElementById("prevBtn").addEventListener("click", () => showReason(idx - 1));
-      document.getElementById("randBtn").addEventListener("click", () => showReason(Math.floor(Math.random() * reasons.length)));
-
-      // ---------- scratch card ----------
-      const scratchCanvas = document.getElementById("scratchCanvas");
-      const scWrap = scratchCanvas.parentElement;
-      const sc = scratchCanvas.getContext("2d");
-      function initScratch() {
-        const rect = scWrap.getBoundingClientRect();
-        scratchCanvas.width = rect.width * devicePixelRatio;
-        scratchCanvas.height = rect.height * devicePixelRatio;
-        scratchCanvas.style.width = rect.width + "px";
-        scratchCanvas.style.height = rect.height + "px";
-        sc.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-
-        const g = sc.createLinearGradient(0, 0, rect.width, rect.height);
-        g.addColorStop(0, "#d55e7a");
-        g.addColorStop(0.5, "#ff8ba3");
-        g.addColorStop(1, "#f4c14b");
-        sc.fillStyle = g;
-        sc.fillRect(0, 0, rect.width, rect.height);
-        sc.font = "500 20px Fraunces, serif";
-        sc.fillStyle = "rgba(255,255,255,0.6)";
-        sc.textAlign = "center";
-        sc.fillText("✧ scratch me ✧", rect.width / 2, rect.height / 2);
-      }
-      initScratch();
-      window.addEventListener("resize", initScratch);
-
-      let scratching = false;
-      function scratch(x, y) {
-        sc.globalCompositeOperation = "destination-out";
-        sc.beginPath();
-        sc.arc(x, y, 26, 0, Math.PI * 2);
-        sc.fill();
-      }
-      function pt(e) {
-        const r = scratchCanvas.getBoundingClientRect();
-        const t = e.touches ? e.touches[0] : e;
-        return { x: t.clientX - r.left, y: t.clientY - r.top };
-      }
-      scratchCanvas.addEventListener("mousedown", (e) => { scratching = true; const p = pt(e); scratch(p.x, p.y); });
-      scratchCanvas.addEventListener("mousemove", (e) => { if (scratching) { const p = pt(e); scratch(p.x, p.y); } });
-      scratchCanvas.addEventListener("mouseup", () => (scratching = false));
-      scratchCanvas.addEventListener("mouseleave", () => (scratching = false));
-      scratchCanvas.addEventListener("touchstart", (e) => { e.preventDefault(); scratching = true; const p = pt(e); scratch(p.x, p.y); }, { passive: false });
-      scratchCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); if (scratching) { const p = pt(e); scratch(p.x, p.y); } }, { passive: false });
-      scratchCanvas.addEventListener("touchend", () => (scratching = false));
     </script>
   </body>
 </html>

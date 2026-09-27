@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e2a2b" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Merry Christmas · from home</title>
+    <meta name="description" content="Snow, warmth, and a gift for you." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg1: #0a1f22;
+        --bg2: #0e2a2b;
+        --bg3: #1b3d3a;
+        --pine: #2e6b52;
+        --pine-2: #3d8a6a;
+        --gold: #f4c14b;
+        --gold-2: #f7dc8b;
+        --red: #d3423a;
+        --red-soft: #e88f89;
+        --cream: #f5efdf;
+        --text: #f5efdf;
+        --text-dim: #a8b8b0;
+      }
+      html, body { min-height: 100dvh; }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1000px 500px at 90% 0%, rgba(244,193,75,0.10), transparent),
+          linear-gradient(180deg, var(--bg1), var(--bg2) 50%, var(--bg3));
+        overflow-x: hidden;
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        position: relative;
+      }
+      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 2; }
+
+      /* --- Snow canvas --- */
+      #snow {
+        position: fixed; inset: 0;
+        pointer-events: none; z-index: 1;
+      }
+
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        min-height: 40px;
+      }
+      .brand {
+        font-family: "Fraunces", serif; color: var(--gold);
+        letter-spacing: 0.1em; font-size: 0.95rem;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 12px 0 8px;
+      }
+      .hero h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2rem, 8vw, 3rem);
+        font-weight: 500; line-height: 1.1;
+        margin-bottom: 8px;
+      }
+      .hero h1 em { color: var(--gold); font-style: italic; }
+      .hero p { color: var(--text-dim); font-size: 0.95rem; }
+
+      /* --- Christmas tree scene --- */
+      .scene {
+        position: relative;
+        height: 400px;
+        margin: 20px 0;
+        display: flex; align-items: flex-end; justify-content: center;
+      }
+      .tree-wrap {
+        position: relative; width: 240px; height: 380px;
+        filter: drop-shadow(0 12px 30px rgba(0,0,0,0.4));
+      }
+      .tree-svg { width: 100%; height: 100%; }
+      .light {
+        cursor: pointer;
+        transition: filter 0.2s, opacity 0.2s;
+        opacity: 0.5;
+      }
+      .light.on {
+        opacity: 1;
+        filter: drop-shadow(0 0 8px currentColor);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { filter: drop-shadow(0 0 8px currentColor); }
+        50% { filter: drop-shadow(0 0 16px currentColor); }
+      }
+      .star {
+        transition: filter 0.4s;
+        filter: drop-shadow(0 0 8px rgba(244,193,75,0.6));
+      }
+      .star.shining {
+        filter: drop-shadow(0 0 22px var(--gold));
+      }
+
+      .toggle-all {
+        position: absolute; top: 16px; right: 0;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: var(--gold-2);
+        padding: 8px 14px; border-radius: 999px;
+        font-family: inherit; font-size: 0.85rem;
+        cursor: pointer; min-height: 40px;
+      }
+      .toggle-all:active { transform: scale(0.96); }
+
+      /* --- Gift & message --- */
+      .gift-card {
+        background: linear-gradient(135deg, rgba(211,66,58,0.18), rgba(46,107,82,0.18));
+        border: 1px solid rgba(244,193,75,0.25);
+        border-radius: 28px;
+        padding: 24px;
+        margin-bottom: 16px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .gift-title { font-family: "Fraunces", serif; font-size: 1.2rem; margin-bottom: 12px; }
+      .gift-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 18px; }
+
+      .gift-box {
+        width: 140px; height: 140px;
+        margin: 0 auto;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+      .gift-box:active { transform: scale(0.95); }
+      .gift-box.opened { animation: openWiggle 0.6s; }
+      @keyframes openWiggle {
+        0%, 100% { transform: scale(1); }
+        30% { transform: scale(1.15) rotate(-6deg); }
+        60% { transform: scale(1.05) rotate(6deg); }
+      }
+
+      .revealed {
+        display: none;
+        margin-top: 20px;
+        font-family: "Fraunces", serif;
+        font-size: 1.15rem; line-height: 1.6;
+        color: var(--gold-2);
+        animation: fadeUp 0.8s ease-out;
+      }
+      .revealed.show { display: block; }
+      .revealed .from { display: block; margin-top: 12px; color: var(--red-soft); font-style: italic; font-size: 0.95rem; }
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* --- Fireplace --- */
+      .fireplace {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 16px;
+        display: flex; align-items: center; gap: 16px;
+      }
+      .fire-anim {
+        width: 60px; height: 60px; position: relative;
+        flex-shrink: 0;
+      }
+      .flame {
+        position: absolute; bottom: 0;
+        border-radius: 50% 50% 20% 20%;
+        animation: flicker 1.2s ease-in-out infinite alternate;
+      }
+      .flame.f1 { left: 15px; width: 30px; height: 45px; background: radial-gradient(ellipse at center bottom, #fff2a8, #f4c14b 40%, #d3423a); }
+      .flame.f2 { left: 22px; width: 16px; height: 35px; background: radial-gradient(ellipse at center bottom, #fff, #f7dc8b 60%, #f4c14b); animation-delay: 0.3s; }
+      @keyframes flicker {
+        0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+        100% { transform: scale(1.05) rotate(2deg); opacity: 1; }
+      }
+      .fire-body { flex: 1; }
+      .fire-title { font-family: "Fraunces", serif; font-size: 1.05rem; margin-bottom: 4px; }
+      .fire-sub { font-size: 0.85rem; color: var(--text-dim); }
+      .fire-toggle {
+        background: transparent; border: 1px solid rgba(255,255,255,0.2);
+        color: var(--gold-2);
+        padding: 8px 14px; border-radius: 999px;
+        font-family: inherit; font-size: 0.85rem;
+        cursor: pointer; min-height: 40px;
+      }
+
+      /* --- Wishes --- */
+      .wish-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+      .wish-title { font-family: "Fraunces", serif; font-size: 1.1rem; margin-bottom: 14px; }
+      .wish-row { display: flex; gap: 8px; margin-bottom: 12px; }
+      .wish-row input {
+        flex: 1;
+        background: rgba(0,0,0,0.25);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-family: inherit; font-size: 0.95rem;
+        outline: none;
+        min-height: 44px;
+      }
+      .wish-row input::placeholder { color: var(--text-dim); }
+      .wish-row input:focus { border-color: var(--gold); }
+      .wish-row button {
+        background: var(--red); color: var(--text);
+        border: none; border-radius: 12px;
+        padding: 0 18px;
+        font-family: inherit; font-weight: 500;
+        cursor: pointer; min-height: 44px; min-width: 44px;
+      }
+      .wish-list { list-style: none; }
+      .wish-list li {
+        padding: 10px 0;
+        border-bottom: 1px dashed rgba(255,255,255,0.08);
+        display: flex; align-items: flex-start; gap: 10px;
+      }
+      .wish-list li:last-child { border-bottom: none; }
+      .wish-list .star-icon { color: var(--gold); flex-shrink: 0; font-size: 1rem; }
+
+      footer {
+        text-align: center; color: var(--text-dim);
+        font-size: 0.8rem; margin-top: 30px;
+      }
+
+      /* audio toggle */
+      .audio-btn {
+        position: fixed;
+        top: calc(env(safe-area-inset-top) + 16px);
+        right: 16px;
+        z-index: 10;
+        background: rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: var(--gold-2);
+        width: 40px; height: 40px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="snow"></canvas>
+
+    <button class="audio-btn" id="audioBtn" aria-label="Toggle music">
+      <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+
+    <div class="container">
+      <header>
+        <a href="/" class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          home
+        </a>
+        <div class="brand">✦ Buon Natale ✦</div>
+      </header>
+
+      <section class="hero">
+        <h1>Merry <em>Christmas</em></h1>
+        <p>tap the tree, open the gift, warm your hands ♡</p>
+      </section>
+
+      <div class="scene">
+        <div class="tree-wrap">
+          <svg class="tree-svg" viewBox="0 0 240 380" xmlns="http://www.w3.org/2000/svg">
+            <!-- star -->
+            <g class="star shining" id="topStar">
+              <polygon points="120,10 128,32 152,32 133,46 140,68 120,54 100,68 107,46 88,32 112,32"
+                       fill="#f4c14b" stroke="#f7dc8b" stroke-width="1"/>
+            </g>
+            <!-- tree layers -->
+            <polygon points="120,45 60,140 180,140" fill="#2e6b52"/>
+            <polygon points="120,90 45,200 195,200" fill="#3d8a6a"/>
+            <polygon points="120,150 30,280 210,280" fill="#2e6b52"/>
+            <!-- trunk -->
+            <rect x="105" y="278" width="30" height="30" fill="#6b3f22"/>
+            <!-- pot -->
+            <rect x="80" y="308" width="80" height="30" rx="4" fill="#a3452b"/>
+            <rect x="76" y="304" width="88" height="10" rx="2" fill="#c25a3a"/>
+
+            <!-- lights (clickable) -->
+            <g id="lights">
+              <circle class="light" data-c="#e88f89" cx="80"  cy="130" r="6" fill="#e88f89"/>
+              <circle class="light" data-c="#f4c14b" cx="130" cy="120" r="6" fill="#f4c14b"/>
+              <circle class="light" data-c="#7bc9e2" cx="160" cy="135" r="6" fill="#7bc9e2"/>
+              <circle class="light" data-c="#f7dc8b" cx="70"  cy="180" r="6" fill="#f7dc8b"/>
+              <circle class="light" data-c="#e88f89" cx="120" cy="170" r="6" fill="#e88f89"/>
+              <circle class="light" data-c="#3d8a6a" cx="170" cy="185" r="6" fill="#a0d9b7"/>
+              <circle class="light" data-c="#7bc9e2" cx="55"  cy="230" r="6" fill="#7bc9e2"/>
+              <circle class="light" data-c="#f4c14b" cx="110" cy="220" r="6" fill="#f4c14b"/>
+              <circle class="light" data-c="#e88f89" cx="150" cy="240" r="6" fill="#e88f89"/>
+              <circle class="light" data-c="#7bc9e2" cx="190" cy="220" r="6" fill="#7bc9e2"/>
+              <circle class="light" data-c="#f7dc8b" cx="45"  cy="270" r="6" fill="#f7dc8b"/>
+              <circle class="light" data-c="#e88f89" cx="90"  cy="255" r="6" fill="#e88f89"/>
+              <circle class="light" data-c="#f4c14b" cx="140" cy="270" r="6" fill="#f4c14b"/>
+              <circle class="light" data-c="#7bc9e2" cx="185" cy="260" r="6" fill="#7bc9e2"/>
+              <circle class="light" data-c="#a0d9b7" cx="200" cy="270" r="6" fill="#a0d9b7"/>
+            </g>
+
+            <!-- ornaments -->
+            <circle cx="105" cy="150" r="7" fill="#d3423a"/>
+            <circle cx="150" cy="200" r="8" fill="#f4c14b"/>
+            <circle cx="75" cy="245" r="8" fill="#7bc9e2"/>
+            <circle cx="165" cy="260" r="7" fill="#d3423a"/>
+          </svg>
+        </div>
+        <button class="toggle-all" id="toggleAll">✨ all on</button>
+      </div>
+
+      <div class="gift-card">
+        <div class="gift-title">A little gift for you</div>
+        <div class="gift-sub">tap to open</div>
+        <div class="gift-box" id="giftBox">
+          <svg viewBox="0 0 140 140" width="140" height="140">
+            <rect x="10" y="55" width="120" height="75" rx="6" fill="#d3423a" stroke="#a02c26" stroke-width="1"/>
+            <rect x="65" y="55" width="10" height="75" fill="#f4c14b"/>
+            <rect x="10" y="80" width="120" height="10" fill="#f4c14b"/>
+            <!-- bow -->
+            <path d="M50 55 Q40 30 30 40 Q25 50 45 55 Q40 45 55 45 Q65 45 70 55" fill="#f4c14b" stroke="#c9a13b" stroke-width="1"/>
+            <path d="M90 55 Q100 30 110 40 Q115 50 95 55 Q100 45 85 45 Q75 45 70 55" fill="#f4c14b" stroke="#c9a13b" stroke-width="1"/>
+            <circle cx="70" cy="53" r="6" fill="#f7dc8b" stroke="#c9a13b" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="revealed" id="revealed">
+          <div id="revealMsg">Anh yêu em, Buon Natale mia stella.</div>
+          <span class="from">— from home, always</span>
+        </div>
+      </div>
+
+      <div class="fireplace">
+        <div class="fire-anim" aria-hidden="true">
+          <div class="flame f1"></div>
+          <div class="flame f2"></div>
+        </div>
+        <div class="fire-body">
+          <div class="fire-title">Warm hands, warm heart</div>
+          <div class="fire-sub">crackling fire · tap to toggle</div>
+        </div>
+        <button class="fire-toggle" id="fireToggle">on</button>
+      </div>
+
+      <div class="wish-card">
+        <div class="wish-title">🎄 wishes for this Christmas</div>
+        <div class="wish-row">
+          <input type="text" id="wishInput" placeholder="a wish, big or small..." maxlength="140" />
+          <button id="wishAdd" aria-label="Add wish">＋</button>
+        </div>
+        <ul class="wish-list" id="wishList"></ul>
+      </div>
+
+      <footer>with all my love, from our little home ♡</footer>
+    </div>
+
+    <script type="module">
+      const store = {
+        get(k, d) { try { return JSON.parse(localStorage.getItem("xmas:" + k)) ?? d; } catch { return d; } },
+        set(k, v) { localStorage.setItem("xmas:" + k, JSON.stringify(v)); },
+      };
+
+      // ---------- snow ----------
+      const canvas = document.getElementById("snow");
+      const ctx = canvas.getContext("2d");
+      let flakes = [];
+      function resize() {
+        canvas.width = window.innerWidth * devicePixelRatio;
+        canvas.height = window.innerHeight * devicePixelRatio;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        ctx.scale(devicePixelRatio, devicePixelRatio);
+      }
+      resize();
+      window.addEventListener("resize", () => { flakes = []; resize(); initFlakes(); });
+
+      function initFlakes() {
+        const count = Math.min(80, Math.floor(window.innerWidth / 8));
+        for (let i = 0; i < count; i++) {
+          flakes.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            r: Math.random() * 2.5 + 0.8,
+            vy: 0.3 + Math.random() * 1.2,
+            vx: Math.sin(i) * 0.3,
+            o: 0.4 + Math.random() * 0.5,
+          });
+        }
+      }
+      initFlakes();
+
+      function drawSnow() {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        flakes.forEach((f) => {
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,255,255," + f.o + ")";
+          ctx.fill();
+          f.y += f.vy;
+          f.x += f.vx + Math.sin(f.y * 0.01) * 0.3;
+          if (f.y > window.innerHeight) { f.y = -5; f.x = Math.random() * window.innerWidth; }
+        });
+        requestAnimationFrame(drawSnow);
+      }
+      drawSnow();
+
+      // ---------- lights ----------
+      const lightSaved = store.get("lights", {});
+      const lights = document.querySelectorAll(".light");
+      lights.forEach((l, i) => {
+        if (lightSaved["l" + i] !== false) l.classList.add("on");
+        l.addEventListener("click", () => {
+          l.classList.toggle("on");
+          lightSaved["l" + i] = l.classList.contains("on");
+          store.set("lights", lightSaved);
+        });
+      });
+      let allOn = true;
+      document.getElementById("toggleAll").addEventListener("click", (e) => {
+        allOn = !allOn;
+        lights.forEach((l, i) => {
+          l.classList.toggle("on", allOn);
+          lightSaved["l" + i] = allOn;
+        });
+        store.set("lights", lightSaved);
+        e.currentTarget.textContent = allOn ? "✨ all on" : "☾ all off";
+      });
+
+      // ---------- gift ----------
+      const giftBox = document.getElementById("giftBox");
+      const revealed = document.getElementById("revealed");
+      giftBox.addEventListener("click", () => {
+        giftBox.classList.add("opened");
+        setTimeout(() => revealed.classList.add("show"), 400);
+      });
+
+      // ---------- fire ----------
+      const fireEl = document.querySelector(".fire-anim");
+      const fireToggle = document.getElementById("fireToggle");
+      let fireOn = true, fireSound = null;
+      fireToggle.addEventListener("click", () => {
+        fireOn = !fireOn;
+        fireEl.style.opacity = fireOn ? 1 : 0.2;
+        fireToggle.textContent = fireOn ? "on" : "off";
+        if (fireOn) startFire(); else stopFire();
+      });
+
+      // ---------- ambient sounds (procedural) ----------
+      let audioCtx, musicNode, fireNodes = null, playing = false;
+      function ensureCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        return audioCtx;
+      }
+
+      // gentle christmas bell tones
+      const bellSeq = [
+        [523.25, 0.6], [659.25, 0.6], [783.99, 0.6], [1046.5, 0.9],
+        [783.99, 0.6], [1046.5, 1.2],
+      ];
+      function playBells() {
+        const c = ensureCtx();
+        const master = c.createGain();
+        master.gain.value = 0.08;
+        master.connect(c.destination);
+        musicNode = master;
+
+        let t = c.currentTime;
+        function scheduleLoop() {
+          bellSeq.forEach(([f, d]) => {
+            const o = c.createOscillator();
+            const g = c.createGain();
+            o.type = "sine";
+            o.frequency.value = f;
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(0.7, t + 0.03);
+            g.gain.exponentialRampToValueAtTime(0.001, t + d);
+            o.connect(g).connect(master);
+            o.start(t);
+            o.stop(t + d + 0.1);
+            t += d;
+          });
+          t += 1.5;
+          if (playing) setTimeout(scheduleLoop, (t - c.currentTime - 3) * 1000);
+        }
+        scheduleLoop();
+      }
+
+      function stopMusic() {
+        if (musicNode) {
+          const c = ensureCtx();
+          musicNode.gain.setTargetAtTime(0, c.currentTime, 0.3);
+          setTimeout(() => { try { musicNode.disconnect(); } catch {} musicNode = null; }, 800);
+        }
+      }
+
+      function startFire() {
+        if (fireNodes) return;
+        const c = ensureCtx();
+        const gain = c.createGain();
+        gain.gain.value = 0.15;
+        gain.connect(c.destination);
+        const buf = c.createBuffer(1, c.sampleRate * 2, c.sampleRate);
+        const data = buf.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < data.length; i++) {
+          const w = Math.random() * 2 - 1;
+          last = (last + 0.02 * w) / 1.02;
+          data[i] = last * 3.5;
+        }
+        const src = c.createBufferSource();
+        src.buffer = buf; src.loop = true;
+        const lp = c.createBiquadFilter();
+        lp.type = "lowpass"; lp.frequency.value = 800;
+        src.connect(lp).connect(gain);
+        src.start();
+        fireNodes = { src, gain };
+      }
+      function stopFire() {
+        if (!fireNodes) return;
+        const c = ensureCtx();
+        fireNodes.gain.gain.setTargetAtTime(0, c.currentTime, 0.3);
+        setTimeout(() => { try { fireNodes.src.stop(); fireNodes.gain.disconnect(); } catch {} fireNodes = null; }, 800);
+      }
+
+      const audioBtn = document.getElementById("audioBtn");
+      const audioIcon = document.getElementById("audioIcon");
+      audioBtn.addEventListener("click", () => {
+        playing = !playing;
+        if (playing) {
+          playBells();
+          startFire();
+          audioIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>';
+        } else {
+          stopMusic();
+          stopFire();
+          audioIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+        }
+      });
+
+      // ---------- wishes ----------
+      const wishInput = document.getElementById("wishInput");
+      const wishList = document.getElementById("wishList");
+      function escapeHtml(s) { return s.replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+      function renderWishes() {
+        const items = store.get("wishes", []);
+        wishList.innerHTML = items.map((w) =>
+          '<li><span class="star-icon">✦</span><span>' + escapeHtml(w) + '</span></li>'
+        ).join("");
+      }
+      function addWish() {
+        const v = wishInput.value.trim();
+        if (!v) return;
+        const items = store.get("wishes", []);
+        items.unshift(v);
+        store.set("wishes", items.slice(0, 30));
+        wishInput.value = "";
+        renderWishes();
+      }
+      document.getElementById("wishAdd").addEventListener("click", addWish);
+      wishInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addWish(); });
+      renderWishes();
+    </script>
+  </body>
+</html>

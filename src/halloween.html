@@ -5,257 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#1a0a1e" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>Happy Halloween</title>
-    <meta name="description" content="Cute-spooky, made for you." />
+    <title>Halloween · coming soon</title>
+    <meta name="description" content="Something spooky-cute is brewing. Come back Oct 31." />
 
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fraunces:opsz,wght@9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon/apple-touch-icon.png" />
     <link rel="manifest" href="./resources/favicon/site.webmanifest" />
 
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
-        --bg1: #0e0518;
-        --bg2: #1a0a1e;
-        --bg3: #2a1533;
-        --orange: #ff8a3d;
-        --orange-2: #ffb072;
-        --purple: #a866ff;
-        --green: #6bcf7f;
-        --cream: #fff2ea;
-        --text: #fff2ea;
-        --text-dim: #c9a8b8;
+        --bg1: #0e0518; --bg2: #1a0a1e; --bg3: #2a1533;
+        --orange: #ff8a3d; --orange-2: #ffb072; --purple: #a866ff;
+        --cream: #fff2ea; --text: #fff2ea; --text-dim: #c9a8b8;
       }
       html, body { min-height: 100dvh; overflow-x: hidden; }
       body {
-        font-family: "Inter", system-ui, sans-serif;
-        color: var(--text);
+        font-family: "Inter", system-ui, sans-serif; color: var(--text);
         background:
           radial-gradient(700px 400px at 90% 10%, rgba(168,102,255,0.18), transparent),
           radial-gradient(600px 400px at 10% 90%, rgba(255,138,61,0.12), transparent),
           linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg3));
         min-height: 100dvh;
-        -webkit-font-smoothing: antialiased;
-        -webkit-tap-highlight-color: transparent;
-        padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+        -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+        padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+        display: flex; align-items: center; justify-content: center;
         position: relative;
       }
-      .container { max-width: 720px; margin: 0 auto; padding: 20px 0 40px; position: relative; z-index: 2; }
-
-      header {
-        display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 16px;
-      }
-      .back {
-        display: inline-flex; align-items: center; gap: 6px;
-        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
-        padding: 8px 12px; border-radius: 999px;
-        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-        min-height: 40px;
-      }
-      .brand {
-        font-family: "Creepster", cursive; color: var(--orange);
-        letter-spacing: 0.1em; font-size: 1.3rem;
-      }
-
-      /* Hero */
-      .hero {
-        text-align: center;
-        padding: 16px 0 8px;
-      }
-      .hero h1 {
-        font-family: "Creepster", cursive;
-        font-size: clamp(2.4rem, 10vw, 4rem);
-        color: var(--orange);
-        letter-spacing: 0.05em;
-        text-shadow: 0 0 30px rgba(255,138,61,0.4);
-      }
-      .hero p {
-        color: var(--text-dim);
-        font-family: "Fraunces", serif;
-        font-style: italic;
-        margin-top: 4px;
-      }
-
-      /* Section */
-      .section-title {
-        font-family: "Fraunces", serif; font-size: 1.15rem;
-        margin: 24px 4px 12px;
-        display: flex; align-items: center; gap: 8px;
-      }
-
-      /* Pumpkin carving */
-      .pumpkin-card {
-        background: rgba(0,0,0,0.35);
-        border: 1px solid rgba(255,138,61,0.25);
-        border-radius: 28px;
-        padding: 24px;
-        margin-bottom: 16px;
-        text-align: center;
-      }
-      .pumpkin-scene {
-        position: relative;
-        width: 260px; height: 260px;
-        margin: 0 auto;
-      }
-      .pumpkin-svg {
-        width: 100%; height: 100%;
-        filter: drop-shadow(0 20px 40px rgba(255,138,61,0.4));
-      }
-      .pumpkin-glow {
-        opacity: 0.3;
-        transition: opacity 0.4s;
-      }
-      .pumpkin-glow.on {
-        opacity: 1;
-        animation: pumpkinPulse 2s ease-in-out infinite;
-      }
-      @keyframes pumpkinPulse {
-        0%, 100% { opacity: 0.85; }
-        50% { opacity: 1; }
-      }
-      .carve {
-        cursor: pointer;
-        opacity: 0.35;
-        transition: opacity 0.3s;
-      }
-      .carve.carved {
-        opacity: 1;
-      }
-
-      .pumpkin-controls {
-        display: flex; gap: 10px; justify-content: center;
-        margin-top: 20px; flex-wrap: wrap;
-      }
-      .p-btn {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.15);
-        color: var(--orange-2);
-        padding: 10px 16px; border-radius: 999px;
-        font-family: inherit; font-size: 0.9rem;
-        cursor: pointer; min-height: 44px;
-      }
-      .p-btn.active {
-        background: var(--orange); color: var(--bg1); border-color: var(--orange);
-      }
-      .pumpkin-caption {
-        color: var(--text-dim); font-size: 0.85rem; margin-top: 12px;
-      }
-
-      /* Trick or treat */
-      .door-card {
-        background: linear-gradient(135deg, rgba(168,102,255,0.15), rgba(255,138,61,0.1));
-        border: 1px solid rgba(168,102,255,0.3);
-        border-radius: 28px;
-        padding: 24px;
-        margin-bottom: 16px;
-        text-align: center;
-      }
-      .door-scene {
-        position: relative;
-        width: 180px; height: 220px;
-        margin: 8px auto 16px;
-        cursor: pointer;
-      }
-      .door-scene svg { width: 100%; height: 100%; }
-      .door-wing {
-        transform-origin: right center;
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .door-scene.open .door-wing {
-        transform: perspective(400px) rotateY(-70deg);
-      }
-      .door-inside {
-        opacity: 0;
-        transition: opacity 0.4s 0.2s;
-      }
-      .door-scene.open .door-inside { opacity: 1; }
-
-      .treat-reveal {
-        display: none;
-        margin-top: 16px;
-        padding: 16px;
-        background: rgba(255,255,255,0.06);
-        border-radius: 16px;
-        font-family: "Fraunces", serif;
-        font-style: italic;
-        font-size: 1.05rem;
-        color: var(--orange-2);
-        animation: fadeIn 0.6s ease-out;
-      }
-      .treat-reveal.show { display: block; }
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Costume picker */
-      .costume-card {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 24px;
-        padding: 20px;
-        margin-bottom: 16px;
-      }
-      .costume-title { font-family: "Fraunces", serif; font-size: 1.1rem; margin-bottom: 4px; }
-      .costume-sub { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 16px; }
-      .costume-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-      }
-      .costume {
-        background: rgba(0,0,0,0.3);
-        border: 1.5px solid rgba(255,255,255,0.08);
-        border-radius: 14px;
-        padding: 14px 8px;
-        cursor: pointer;
-        text-align: center;
-        transition: transform 0.15s, border-color 0.2s, background 0.2s;
-      }
-      .costume:active { transform: scale(0.95); }
-      .costume.selected {
-        border-color: var(--orange);
-        background: rgba(255,138,61,0.15);
-      }
-      .costume-emoji { font-size: 2rem; }
-      .costume-name { font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; }
-
-      /* Spooky joke */
-      .joke-card {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 24px;
-        padding: 20px;
-        margin-bottom: 16px;
-        text-align: center;
-      }
-      .joke-q {
-        font-family: "Fraunces", serif; font-size: 1.1rem;
-        margin-bottom: 12px; color: var(--cream);
-      }
-      .joke-a {
-        color: var(--orange-2);
-        font-family: "Fraunces", serif; font-style: italic;
-        min-height: 1.5em;
-        margin-bottom: 14px;
-      }
-      .joke-btn {
-        background: transparent;
-        border: 1px solid rgba(255,138,61,0.5);
-        color: var(--orange-2);
-        padding: 8px 16px; border-radius: 999px;
-        font-family: inherit; font-size: 0.85rem;
-        cursor: pointer; min-height: 40px;
-        display: inline-flex; align-items: center; gap: 6px;
-      }
-
-      footer {
-        text-align: center; color: var(--text-dim);
-        font-size: 0.8rem; margin-top: 30px;
-      }
-
-      /* floating ghosts / bats */
       .fx {
         position: fixed; inset: 0;
         pointer-events: none; z-index: 1;
@@ -263,7 +39,7 @@
       .fx-item {
         position: absolute;
         font-size: 1.6rem;
-        opacity: 0.15;
+        opacity: 0.2;
         animation: float 12s ease-in-out infinite;
       }
       @keyframes float {
@@ -272,6 +48,71 @@
         50% { transform: translateY(-20px) translateX(-20px); }
         75% { transform: translateY(-40px) translateX(10px); }
       }
+
+      .card {
+        max-width: 480px; width: 100%; text-align: center;
+        position: relative; z-index: 2;
+        padding: 32px 24px 40px;
+      }
+      .back {
+        position: absolute; top: 20px; left: 20px;
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-dim); text-decoration: none; font-size: 0.9rem;
+        padding: 8px 12px; border-radius: 999px;
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        min-height: 40px; z-index: 3;
+      }
+
+      .pumpkin {
+        width: 140px; height: 140px; margin: 0 auto 20px;
+        animation: wobble 3s ease-in-out infinite;
+        filter: drop-shadow(0 8px 24px rgba(255,138,61,0.4));
+      }
+      @keyframes wobble {
+        0%, 100% { transform: rotate(-2deg); }
+        50% { transform: rotate(2deg); }
+      }
+      .pumpkin svg { width: 100%; height: 100%; }
+      .pumpkin .glow { animation: glowPulse 2s ease-in-out infinite; }
+      @keyframes glowPulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+
+      .eyebrow {
+        font-size: 0.72rem; letter-spacing: 0.4em; text-transform: uppercase;
+        color: var(--orange); margin-bottom: 10px;
+      }
+      h1 {
+        font-family: "Creepster", cursive;
+        font-size: clamp(2.2rem, 9vw, 3rem);
+        color: var(--orange); letter-spacing: 0.03em;
+        text-shadow: 0 0 24px rgba(255,138,61,0.4);
+        margin-bottom: 8px;
+      }
+      .lead {
+        color: var(--text-dim); font-size: 0.95rem;
+        margin-bottom: 22px; line-height: 1.5;
+      }
+      .countdown {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 8px; margin-bottom: 22px;
+      }
+      .cd {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(168,102,255,0.2);
+        border-radius: 14px; padding: 12px 4px;
+        backdrop-filter: blur(8px);
+      }
+      .cd-num { font-family: "Fraunces", serif; font-size: clamp(1.4rem, 5.5vw, 1.9rem); color: var(--orange-2); }
+      .cd-lbl { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 6px; }
+
+      .note {
+        font-family: "Fraunces", serif; font-style: italic;
+        color: var(--cream); font-size: 1rem; line-height: 1.6;
+        max-width: 32ch; margin: 0 auto;
+      }
+      footer { margin-top: 24px; color: var(--text-dim); font-size: 0.8rem; }
     </style>
   </head>
   <body>
@@ -281,229 +122,71 @@
       <div class="fx-item" style="top: 65%; left: 10%; animation-delay: 4s;">🕸</div>
       <div class="fx-item" style="top: 85%; right: 15%; animation-delay: 1s;">👻</div>
       <div class="fx-item" style="top: 25%; right: 30%; animation-delay: 6s;">🦇</div>
+      <div class="fx-item" style="top: 55%; left: 30%; animation-delay: 3s;">🕷</div>
     </div>
 
-    <div class="container">
-      <header>
-        <a href="/" class="back">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          home
-        </a>
-        <div class="brand">🎃 Halloween</div>
-      </header>
+    <a href="/" class="back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      home
+    </a>
 
-      <section class="hero">
-        <h1>Boo, my love</h1>
-        <p>a little spooky, mostly sweet ♡</p>
-      </section>
-
-      <div class="section-title">🎃 carve our jack-o-lantern</div>
-      <div class="pumpkin-card">
-        <div class="pumpkin-scene">
-          <svg class="pumpkin-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
-            <!-- glow behind -->
-            <circle class="pumpkin-glow" id="glow" cx="130" cy="145" r="90" fill="url(#glowGrad)"/>
-            <defs>
-              <radialGradient id="glowGrad">
-                <stop offset="0%" stop-color="#ffcc66" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#ff8a3d" stop-opacity="0"/>
-              </radialGradient>
-            </defs>
-            <!-- stem -->
-            <rect x="120" y="55" width="20" height="30" rx="3" fill="#4a7a2a"/>
-            <path d="M120 62 Q100 55 95 40" stroke="#6bcf7f" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <!-- pumpkin body -->
-            <ellipse cx="130" cy="150" rx="90" ry="80" fill="#ff8a3d"/>
-            <ellipse cx="130" cy="150" rx="65" ry="80" fill="#ff7a2d" opacity="0.5"/>
-            <ellipse cx="130" cy="150" rx="40" ry="80" fill="#ff6d1c" opacity="0.4"/>
-            <ellipse cx="90" cy="150" rx="20" ry="75" fill="#e06526" opacity="0.6"/>
-            <ellipse cx="170" cy="150" rx="20" ry="75" fill="#e06526" opacity="0.6"/>
-            <!-- face pieces (carved) -->
-            <g id="face">
-              <!-- eye left -->
-              <polygon class="carve" data-key="eye-l" points="90,130 105,120 118,135 105,140" fill="#0a0410"/>
-              <!-- eye right -->
-              <polygon class="carve" data-key="eye-r" points="170,130 155,120 142,135 155,140" fill="#0a0410"/>
-              <!-- nose -->
-              <polygon class="carve" data-key="nose" points="130,150 122,162 138,162" fill="#0a0410"/>
-              <!-- mouth (smile) -->
-              <path class="carve" data-key="mouth-happy" d="M85 175 Q130 210 175 175 L165 180 L155 175 L145 180 L135 175 L125 180 L115 175 L105 180 L95 175 Z" fill="#0a0410"/>
-              <!-- alternative spooky mouth -->
-              <path class="carve" data-key="mouth-spooky" d="M85 175 L100 200 L115 180 L130 205 L145 180 L160 200 L175 175 L165 180 L155 175 L145 180 L135 175 L125 180 L115 175 L105 180 L95 175 Z" fill="#0a0410" style="display:none"/>
-            </g>
-          </svg>
-        </div>
-        <div class="pumpkin-controls">
-          <button class="p-btn active" data-mood="happy">😊 happy</button>
-          <button class="p-btn" data-mood="spooky">😱 spooky</button>
-          <button class="p-btn" id="candleBtn">🕯 light candle</button>
-        </div>
-        <div class="pumpkin-caption">tap the pieces to carve · tap the mood buttons</div>
+    <main class="card">
+      <div class="pumpkin" aria-hidden="true">
+        <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="pglow">
+              <stop offset="0%" stop-color="#ffcc66" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#ff8a3d" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle class="glow" cx="70" cy="75" r="70" fill="url(#pglow)"/>
+          <rect x="65" y="15" width="10" height="18" rx="2" fill="#4a7a2a"/>
+          <path d="M65 20 Q52 18 48 8" stroke="#6bcf7f" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <ellipse cx="70" cy="80" rx="55" ry="48" fill="#ff8a3d"/>
+          <ellipse cx="70" cy="80" rx="40" ry="48" fill="#ff7a2d" opacity="0.5"/>
+          <ellipse cx="70" cy="80" rx="22" ry="48" fill="#ff6d1c" opacity="0.4"/>
+          <!-- eyes -->
+          <polygon points="45,68 58,58 68,72 58,76" fill="#0a0410"/>
+          <polygon points="95,68 82,58 72,72 82,76" fill="#0a0410"/>
+          <!-- nose -->
+          <polygon points="70,80 63,90 77,90" fill="#0a0410"/>
+          <!-- mouth -->
+          <path d="M43 100 Q70 130 97 100 L88 105 L80 100 L72 105 L64 100 L56 105 L48 100 Z" fill="#0a0410"/>
+        </svg>
       </div>
 
-      <div class="section-title">🚪 trick or treat?</div>
-      <div class="door-card">
-        <p style="color: var(--text-dim); margin-bottom: 4px;">tap the door...</p>
-        <div class="door-scene" id="door">
-          <svg viewBox="0 0 180 220" xmlns="http://www.w3.org/2000/svg">
-            <!-- frame -->
-            <rect x="10" y="20" width="160" height="195" rx="4" fill="#3a1f2a" stroke="#1a0a15" stroke-width="2"/>
-            <!-- inside (revealed) -->
-            <g class="door-inside">
-              <rect x="20" y="30" width="140" height="180" fill="#1a0a15"/>
-              <text x="90" y="115" text-anchor="middle" font-family="Fraunces, serif" font-size="60" fill="#ff8a3d">💝</text>
-              <text x="90" y="150" text-anchor="middle" font-family="Fraunces, serif" font-size="14" fill="#ffb072">a treat, of course</text>
-            </g>
-            <!-- door -->
-            <g class="door-wing">
-              <rect x="20" y="30" width="140" height="180" rx="2" fill="#8b4a2a" stroke="#4a2a15" stroke-width="2"/>
-              <rect x="30" y="40" width="55" height="70" rx="1" fill="#6b3820"/>
-              <rect x="95" y="40" width="55" height="70" rx="1" fill="#6b3820"/>
-              <rect x="30" y="120" width="55" height="80" rx="1" fill="#6b3820"/>
-              <rect x="95" y="120" width="55" height="80" rx="1" fill="#6b3820"/>
-              <circle cx="140" cy="120" r="4" fill="#f4c14b"/>
-              <!-- knocker -->
-              <circle cx="90" cy="90" r="8" fill="#c9a13b"/>
-              <path d="M85 95 Q90 105 95 95" fill="none" stroke="#c9a13b" stroke-width="3"/>
-              <!-- number -->
-              <text x="90" y="30" text-anchor="middle" font-family="Fraunces, serif" font-size="12" fill="#c9a13b">31</text>
-            </g>
-          </svg>
-        </div>
-        <div class="treat-reveal" id="treatReveal">
-          <span id="treatText">You'll always be my treat, never a trick. ♡</span>
-        </div>
+      <div class="eyebrow">something is brewing</div>
+      <h1>Halloween Soon</h1>
+      <p class="lead">Cute-spooky is still being carved. Come back Oct 31 for the trick... or the treat.</p>
+
+      <div class="countdown">
+        <div class="cd"><div class="cd-num" id="d">--</div><div class="cd-lbl">days</div></div>
+        <div class="cd"><div class="cd-num" id="h">--</div><div class="cd-lbl">hrs</div></div>
+        <div class="cd"><div class="cd-num" id="m">--</div><div class="cd-lbl">min</div></div>
+        <div class="cd"><div class="cd-num" id="s">--</div><div class="cd-lbl">sec</div></div>
       </div>
 
-      <div class="section-title">👗 what shall we be?</div>
-      <div class="costume-card">
-        <div class="costume-title">Pick our matching costumes</div>
-        <div class="costume-sub">saved for next Halloween ✧</div>
-        <div class="costume-grid" id="costumeGrid">
-          <button class="costume" data-c="ghost"><div class="costume-emoji">👻</div><div class="costume-name">ghosts</div></button>
-          <button class="costume" data-c="vampire"><div class="costume-emoji">🧛</div><div class="costume-name">vampires</div></button>
-          <button class="costume" data-c="witch"><div class="costume-emoji">🧙</div><div class="costume-name">witches</div></button>
-          <button class="costume" data-c="skeleton"><div class="costume-emoji">💀</div><div class="costume-name">skeletons</div></button>
-          <button class="costume" data-c="cat"><div class="costume-emoji">🐈‍⬛</div><div class="costume-name">cats</div></button>
-          <button class="costume" data-c="pumpkin"><div class="costume-emoji">🎃</div><div class="costume-name">pumpkins</div></button>
-        </div>
-      </div>
-
-      <div class="section-title">😅 dad joke of the night</div>
-      <div class="joke-card">
-        <div class="joke-q" id="jokeQ">Why don't ghosts date anymore?</div>
-        <div class="joke-a" id="jokeA">Tap for the answer...</div>
-        <button class="joke-btn" id="jokeBtn">reveal · next
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3.5-7.13"/><path d="M21 4v6h-6"/></svg>
-        </button>
-      </div>
-
-      <footer>be spooky, be cute, be mine 🎃</footer>
-    </div>
+      <p class="note">"You'll always be my treat, never a trick." ♡</p>
+      <footer>meiot.site · check back on Oct 31</footer>
+    </main>
 
     <script type="module">
-      const store = {
-        get(k, d) { try { return JSON.parse(localStorage.getItem("hw:" + k)) ?? d; } catch { return d; } },
-        set(k, v) { localStorage.setItem("hw:" + k, JSON.stringify(v)); },
-      };
-
-      // ---------- pumpkin carving ----------
-      const carvedState = store.get("carved", { "eye-l": false, "eye-r": false, "nose": false, "mouth-happy": false, "mouth-spooky": false });
-      document.querySelectorAll(".carve").forEach((el) => {
-        const key = el.dataset.key;
-        if (carvedState[key]) el.classList.add("carved");
-        el.addEventListener("click", () => {
-          el.classList.toggle("carved");
-          carvedState[key] = el.classList.contains("carved");
-          store.set("carved", carvedState);
-        });
-      });
-
-      const happyMouth = document.querySelector('[data-key="mouth-happy"]');
-      const spookyMouth = document.querySelector('[data-key="mouth-spooky"]');
-      document.querySelectorAll(".p-btn[data-mood]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".p-btn[data-mood]").forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          const mood = btn.dataset.mood;
-          if (mood === "happy") {
-            happyMouth.style.display = "block";
-            spookyMouth.style.display = "none";
-          } else {
-            happyMouth.style.display = "none";
-            spookyMouth.style.display = "block";
-          }
-          store.set("mood", mood);
-        });
-      });
-      // restore mood
-      const savedMood = store.get("mood", "happy");
-      if (savedMood === "spooky") document.querySelector('[data-mood="spooky"]').click();
-
-      // candle glow toggle
-      const glow = document.getElementById("glow");
-      let candleOn = store.get("candle", true);
-      function updateGlow() { glow.classList.toggle("on", candleOn); document.getElementById("candleBtn").textContent = candleOn ? "🕯 candle on" : "🕯 candle off"; }
-      updateGlow();
-      document.getElementById("candleBtn").addEventListener("click", () => { candleOn = !candleOn; store.set("candle", candleOn); updateGlow(); });
-
-      // ---------- door ----------
-      const door = document.getElementById("door");
-      const treats = [
-        "You'll always be my treat, never a trick. ♡",
-        "I chose you 100 times and I'd choose you 100 more.",
-        "You are the softest thing in my scary weeks.",
-        "Trick? Never. You are only sweet.",
-        "You are my favorite haunt. Come back tomorrow. And every day.",
-      ];
-      door.addEventListener("click", () => {
-        door.classList.toggle("open");
-        if (door.classList.contains("open")) {
-          document.getElementById("treatText").textContent = treats[Math.floor(Math.random() * treats.length)];
-          document.getElementById("treatReveal").classList.add("show");
-        }
-      });
-
-      // ---------- costume ----------
-      const grid = document.getElementById("costumeGrid");
-      const savedC = store.get("costume");
-      grid.querySelectorAll(".costume").forEach((c) => {
-        if (c.dataset.c === savedC) c.classList.add("selected");
-        c.addEventListener("click", () => {
-          grid.querySelectorAll(".costume").forEach((x) => x.classList.remove("selected"));
-          c.classList.add("selected");
-          store.set("costume", c.dataset.c);
-        });
-      });
-
-      // ---------- jokes ----------
-      const jokes = [
-        ["Why don't ghosts date anymore?", "They can't find anyone with a lot of body."],
-        ["What's a vampire's favorite fruit?", "A neck-tarine."],
-        ["Why did the skeleton stay home from the party?", "It had no body to go with."],
-        ["What do witches use to keep their hair up?", "Scare-spray."],
-        ["Why are ghosts bad liars?", "You can see right through them."],
-        ["What's a mummy's favorite music?", "Wrap."],
-        ["Why did the vampire go to school?", "To improve his coffin-tation."],
-        ["How do you make a witch itch?", "Take away the w."],
-      ];
-      let jokeIdx = 0, revealed = false;
-      function setJoke() {
-        const [q, a] = jokes[jokeIdx];
-        document.getElementById("jokeQ").textContent = q;
-        document.getElementById("jokeA").textContent = revealed ? a : "tap to reveal...";
+      function nextTarget() {
+        const now = new Date();
+        let t = new Date(now.getFullYear(), 9, 31);
+        if (t < now) t = new Date(now.getFullYear() + 1, 9, 31);
+        return t;
       }
-      setJoke();
-      document.getElementById("jokeBtn").addEventListener("click", () => {
-        if (!revealed) {
-          revealed = true;
-          setJoke();
-        } else {
-          revealed = false;
-          jokeIdx = (jokeIdx + 1) % jokes.length;
-          setJoke();
-        }
-      });
+      const target = nextTarget();
+      function tick() {
+        const diff = target - new Date();
+        if (diff <= 0) { ["d","h","m","s"].forEach(id => document.getElementById(id).textContent = 0); return; }
+        document.getElementById("d").textContent = Math.floor(diff / 864e5);
+        document.getElementById("h").textContent = String(Math.floor(diff / 36e5) % 24).padStart(2,"0");
+        document.getElementById("m").textContent = String(Math.floor(diff / 6e4) % 60).padStart(2,"0");
+        document.getElementById("s").textContent = String(Math.floor(diff / 1000) % 60).padStart(2,"0");
+      }
+      tick(); setInterval(tick, 1000);
     </script>
   </body>
 </html>

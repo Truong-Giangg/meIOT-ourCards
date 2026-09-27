@@ -23,23 +23,14 @@ ARG OPEN_DATE=""
 ENV NAME=$NAME PIC=$PIC NICKNAME=$NICKNAME HBD_MSG=$HBD_MSG \
     SCROLL_MSG=$SCROLL_MSG OPEN_DATE=$OPEN_DATE
 
-# Generate src/index.html + processed pic, then build static output to /app/dist.
+# Generate src/index.html + processed pic, then build all pages to /app/dist.
 #
-# Seasonal pages are disabled until their day gets closer. When you're ready to
-# ship one, move its filename from the "disabled" list into the parcel command.
-#
-#   disabled:  src/christmas.html
-#              src/newyear.html
-#              src/valentine.html
-#              src/halloween.html
-#              src/women.html
-#
-# Full command with all pages (for reference, when re-enabling):
-#   npx parcel build src/index.html src/sleep.html src/nup.html src/fiting.html \
-#     src/christmas.html src/newyear.html src/valentine.html src/halloween.html \
-#     src/miss.html src/women.html src/game.html --public-url /
+# Seasonal pages (christmas, newyear, valentine, halloween, women) currently
+# serve an animated "coming soon" placeholder. The finished, feature-rich
+# versions live at src/_seasonal/ — swap them back into src/ when the day is
+# closer.
 RUN npm run init-index-local \
-    && npx parcel build src/index.html src/sleep.html src/nup.html src/fiting.html src/miss.html src/game.html --public-url /
+    && npx parcel build src/index.html src/sleep.html src/nup.html src/fiting.html src/miss.html src/game.html src/christmas.html src/newyear.html src/valentine.html src/halloween.html src/women.html --public-url /
 
 # ---- Production stage (tiny, non-root, no Node) ----
 FROM nginxinc/nginx-unprivileged:alpine
