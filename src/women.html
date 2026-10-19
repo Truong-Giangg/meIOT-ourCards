@@ -220,6 +220,10 @@
       body.open .stage {
         min-height: 0;
       }
+      /* After the flip finishes JS adds .gone — removes the lid entirely so
+         the garden and the rest of the content take the space it leaves. */
+      .lid.gone { display: none; }
+      body.open:has(.lid.gone) .stage { display: none; }
 
       /* ---------- revealed content ---------- */
       .container {
@@ -281,35 +285,30 @@
         margin-bottom: 16px;
       }
 
-      /* Bouquet */
+      /* Bouquet card holds the animated garden scene below */
       .bouquet-card {
         background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,248,240,0.5));
         border: 1px solid rgba(214,114,133,0.15);
         border-radius: 28px;
-        padding: 20px;
+        padding: 18px;
         margin-bottom: 16px;
         text-align: center;
         box-shadow: 0 8px 30px rgba(214,114,133,0.08);
       }
       .bouquet-scene {
         position: relative;
-        width: 260px; height: 280px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-width: 340px;
         margin: 0 auto;
-      }
-      .bouquet-scene svg { width: 100%; height: 100%; }
-      /* bloom collapsed by default; only runs once the card is open */
-      .bloom {
-        transform-origin: center;
-        transform-box: fill-box;
-        opacity: 0;
-        transform: scale(0);
-      }
-      body.open .bloom {
-        animation: bloomIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-      }
-      @keyframes bloomIn {
-        from { transform: scale(0); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
+        border-radius: 20px;
+        overflow: hidden;
+        /* soft dusk-rose backdrop so the garden's glow reads correctly */
+        background:
+          radial-gradient(ellipse at 50% 10%, rgba(255,230,235,0.25), transparent 55%),
+          radial-gradient(ellipse at 50% 100%, rgba(74,40,54,0.65), rgba(74,40,54,0.4) 40%, rgba(122,70,86,0.35) 70%),
+          linear-gradient(180deg, #3a1f2b 0%, #4a2836 55%, #6b3a4a 100%);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), inset 0 20px 40px rgba(0,0,0,0.3);
       }
       .bouquet-butterfly {
         position: absolute; font-size: 1.3rem;
@@ -486,8 +485,8 @@
             <ellipse cx="108" cy="120" rx="12" ry="6" fill="#7a9e6e" transform="rotate(30 108 120)"/>
           </svg>
         </div>
-        <div class="lid-eyebrow">Mayzie Bloom Box</div>
-        <div class="lid-title">Happy Women's Day<span>a little box, blooming for you</span></div>
+        <div class="lid-eyebrow">Flower Box</div>
+        <div class="lid-title">Happy Women's Day<span>a little beauty, blooming for you</span></div>
         <div class="lid-hint">tap to open 🌸</div>
       </div>
     </div>
@@ -582,42 +581,13 @@
         </div>
       </div>
 
-      <div class="section-title">✨ what you are, to me</div>
-      <div class="qualities-card">
-        <div class="quality-icon" id="qEmoji">🌸</div>
-        <div class="quality-word" id="qWord">brave</div>
-        <div class="quality-desc" id="qDesc">You crossed a continent to build our future. That's not a decision — that's a whole spirit.</div>
-        <div class="quality-nav">
-          <button id="qPrev" aria-label="Previous">‹</button>
-          <button class="primary" id="qNext" aria-label="Next">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-5.5-9-10a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 10-9 10z"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="section-title">💐 a little verse</div>
+      <div class="section-title">💌 lời anh gửi em</div>
       <div class="verse-card">
-        You are made of soft mornings and stubborn dreams,<br/>
-        of quiet strength that mountains would envy,<br/>
-        of a laugh that turns kitchens into homes.<br/><br/>
-        Not one day of the year — every day, every year,<br/>
-        the world is better because you're in it.<br/>
-        <span class="sig">— con tanto amore, per te ♡</span>
-      </div>
-
-      <div class="section-title">🌷 wishes for you this year</div>
-      <div class="wish-card">
-        <div class="wish-title">May you always have</div>
-        <div class="wish-sub">the things you don't ask for but deserve most</div>
-        <ul class="wish-list">
-          <li><span class="flower">🌸</span> soft mornings and slow coffee</li>
-          <li><span class="flower">🌼</span> people who see you clearly and stay</li>
-          <li><span class="flower">🌷</span> the courage to rest without guilt</li>
-          <li><span class="flower">🌹</span> days that feel like your own, not borrowed</li>
-          <li><span class="flower">🪷</span> laughter, real and loud and often</li>
-          <li><span class="flower">🌻</span> a body that carries you kindly</li>
-          <li><span class="flower">💐</span> the certainty that you are loved, right here</li>
-        </ul>
+        Chúc cô gái của anh một ngày 20/10 thật nhiều niềm vui!<br/><br/>
+        Dù năm nay không thể tự tay tặng hoa cho em, nhưng nhớ là anh lúc nào cũng thương bé nhiều lắm.<br/><br/>
+        Bên Ý một mình nhớ giữ sức khỏe, luôn giữ năng lượng tích cực và sự đáng yêu vốn có nhé.<br/><br/>
+        Tối nay duyệt ngay món ăn anh chuẩn bị cho em xem có vừa miệng không nhé!!
+        <span class="sig">— anh Yang ♡</span>
       </div>
 
       <footer>from home, for you · today and every day 🌸</footer>
@@ -638,6 +608,19 @@
         // Flowers erupt in the SAME frame as the flip starts — one gesture,
         // one moment: tap → card flips AND flowers bloom together.
         burstFlowers();
+        // Once the flip finishes, remove the lid entirely so the content
+        // below fills the space. transitionend is exact; the setTimeout is
+        // a safety net (reduced motion, cancelled transition, etc.).
+        let removed = false;
+        const removeLid = () => {
+          if (removed) return;
+          removed = true;
+          lid.classList.add("gone");
+        };
+        lid.addEventListener("transitionend", (e) => {
+          if (e.propertyName === "transform") removeLid();
+        }, { once: true });
+        setTimeout(removeLid, 1200);
       }
       lid.addEventListener("click", openCard);
       lid.addEventListener("keydown", (e) => {
@@ -740,39 +723,7 @@
         }
       }
 
-      // ---------- qualities carousel ----------
-      const qualities = [
-        { i: "🦁", w: "brave", d: "You crossed a continent to build our future. That's not a decision — that's a whole spirit." },
-        { i: "🌸", w: "gentle", d: "Your softness with Núp, with strangers, with me. Nothing wasted." },
-        { i: "🔥", w: "fierce", d: "When you love, you love the whole way. When you fight for something, watch out world." },
-        { i: "🌊", w: "patient", d: "Two years abroad, one exam at a time. Slow, steady, unstoppable." },
-        { i: "☕", w: "thoughtful", d: "The way you remember birthdays and how I take my coffee. Small things build cathedrals." },
-        { i: "🌿", w: "grounded", d: "In storms you're the tree, and I've held that trunk more than once." },
-        { i: "✨", w: "bright", d: "You are the light people warm their hands on without realizing." },
-        { i: "🎨", w: "creative", d: "You see the world sideways and make it more beautiful for the rest of us." },
-        { i: "💝", w: "loving", d: "You love the way waves come home — every time, without fail." },
-        { i: "🏔", w: "strong", d: "You've carried heavier things than most people know. And you're still here, still soft." },
-        { i: "🌙", w: "wise", d: "Old-soul wisdom in your voice at 3 AM. I keep learning." },
-        { i: "🌻", w: "honest", d: "You tell hard truths kindly. That's rarer than diamonds." },
-      ];
-      let qi = 0;
-      function showQ(i) {
-        qi = (i + qualities.length) % qualities.length;
-        const q = qualities[qi];
-        [
-          ["qEmoji", q.i],
-          ["qWord", q.w],
-          ["qDesc", q.d],
-        ].forEach(([id, val]) => {
-          const el = document.getElementById(id);
-          el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: "forwards" }).onfinish = () => {
-            el.textContent = val;
-            el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300, fill: "forwards" });
-          };
-        });
-      }
-      document.getElementById("qPrev").addEventListener("click", () => showQ(qi - 1));
-      document.getElementById("qNext").addEventListener("click", () => showQ(qi + 1));
+
     </script>
   </body>
 </html>
