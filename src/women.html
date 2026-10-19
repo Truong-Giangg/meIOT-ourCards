@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -51,6 +51,77 @@
       }
       @keyframes fall {
         to { transform: translate(30px, calc(100vh + 40px)) rotate(360deg); }
+      }
+
+      /* ---------- Celebratory flower burst (fires once after the card flips open) ---------- */
+      .fx-burst {
+        position: fixed; inset: 0;
+        pointer-events: none;
+        z-index: 1000; /* above everything else */
+        overflow: hidden;
+      }
+      /* OUTER element: handles translation (physics-feeling arc + gravity).
+         INNER element: handles the bloom-pop and continuous spin.
+         Splitting them avoids transform conflicts and lets each motion
+         have its own easing — translate decelerates (air drag), while the
+         flower spins linearly on its own axis. */
+      .burst-flower {
+        position: absolute;
+        left: 0; top: 0;
+        pointer-events: none;
+        will-change: transform;
+        user-select: none;
+        /* `linear` here is intentional — each keyframe segment inside
+           burstMove sets its OWN easing (ease-out for the rise, ease-in
+           for the fall) so gravity reads naturally in both directions. */
+        animation: burstMove var(--dur, 3.4s) var(--delay, 0s) forwards linear;
+      }
+      .burst-flower-inner {
+        display: inline-block;
+        transform-origin: center;
+        will-change: transform, opacity;
+        opacity: 0;
+        line-height: 1;
+        /* linear so the flower keeps spinning at a steady rate; scale pops in
+           at the start and fades out at the end */
+        animation: burstLife var(--dur, 3s) var(--delay, 0s) forwards linear;
+      }
+      @keyframes burstMove {
+        0% {
+          /* RISE phase (0% → 40%): ease-out mimics real gravity decelerating
+             an upward-moving object. Fast launch, slowing as it climbs. */
+          animation-timing-function: cubic-bezier(0.15, 0.75, 0.35, 1);
+          transform: translate(-50%, -50%);
+        }
+        /* Apex at 40% so the longer FALL phase gets 60% of the lifetime —
+           matches real projectile motion (fall takes longer than rise when
+           ending below the launch point). */
+        40% {
+          /* FALL phase (40% → 100%): ease-in — slow at the top (hangs for a
+             beat), then accelerating downward like gravity actually does. */
+          animation-timing-function: cubic-bezier(0.55, 0.05, 0.85, 0.5);
+          transform:
+            translate(
+              calc(-50% + var(--dx)),
+              calc(-50% + var(--dy))
+            );
+        }
+        100% {
+          transform:
+            translate(
+              calc(-50% + var(--dx) * 1.15),
+              calc(-50% + var(--dy) + var(--fall, 300px))
+            );
+        }
+      }
+      @keyframes burstLife {
+        0%   { opacity: 0; transform: scale(0.1) rotate(0deg); }
+        /* near-instant pop so flowers appear THE MOMENT the flip ends */
+        2%   { opacity: 1; transform: scale(1.2) rotate(calc(var(--rot) * 0.02)); }
+        7%   { transform: scale(1) rotate(calc(var(--rot) * 0.07)); }
+        78%  { opacity: 1; transform: scale(1) rotate(calc(var(--rot) * 0.78)); }
+        /* gentle fade and slight shrink at end of life */
+        100% { opacity: 0; transform: scale(0.9) rotate(var(--rot)); }
       }
 
       /* ---------- Closed lid / fold-open stage ---------- */
@@ -260,11 +331,6 @@
         50% { transform: translate(-3px, -4px) rotate(-3deg); }
         75% { transform: translate(6px, -10px) rotate(6deg); }
       }
-      .bouquet-tap {
-        color: var(--ink-dim); font-size: 0.9rem;
-        margin-top: 8px;
-      }
-
       /* Section */
       .section-title {
         font-family: "Fraunces", serif; font-size: 1.15rem;
@@ -388,6 +454,7 @@
   </head>
   <body>
     <div class="fx-petals" id="petals" aria-hidden="true"></div>
+    <div class="fx-burst" id="burst" aria-hidden="true"></div>
 
     <div class="stage" id="stage">
       <div class="lid" id="lid" role="button" tabindex="0"
@@ -427,10 +494,6 @@
 
     <div class="container" id="content">
       <header>
-        <a href="./fiting.html" class="back">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          home
-        </a>
         <div class="brand">◇ per lei ◇</div>
       </header>
 
@@ -517,7 +580,6 @@
             </g>
           </svg>
         </div>
-        <div class="bouquet-tap">tap for more blooms 🌸</div>
       </div>
 
       <div class="section-title">✨ what you are, to me</div>
@@ -564,6 +626,7 @@
     <script type="module">
       // ---------- fold-open lid ----------
       const lid = document.getElementById("lid");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       let opened = false;
       function openCard() {
         if (opened) return;
@@ -572,6 +635,9 @@
         lid.setAttribute("aria-expanded", "true");
         lid.setAttribute("aria-hidden", "true");
         lid.setAttribute("tabindex", "-1");
+        // Flowers erupt in the SAME frame as the flip starts — one gesture,
+        // one moment: tap → card flips AND flowers bloom together.
+        burstFlowers();
       }
       lid.addEventListener("click", openCard);
       lid.addEventListener("keydown", (e) => {
@@ -596,31 +662,83 @@
       }
       for (let i = 0; i < 12; i++) makePetal();
 
-      // ---------- bouquet more blooms ----------
-      const bouquet = document.getElementById("bouquet");
-      bouquet.addEventListener("click", () => {
-        // add a new small bloom at random position within bouquet area
-        const ns = "http://www.w3.org/2000/svg";
-        const g = document.createElementNS(ns, "g");
-        g.setAttribute("class", "bloom");
-        const cx = 80 + Math.random() * 100;
-        const cy = 90 + Math.random() * 70;
-        const colors = [
-          ["#e88fa0", "#d67285"],
-          ["#f5b4c0", "#e88fa0"],
-          ["#d4a24c", "#a07830"],
-          ["#fff2ea", "#f5b4c0"],
-          ["#d67285", "#a04a5c"],
+      // ---------- auto flower burst (fires after the card flips open) ----------
+      // Every flower spawns at the center of the card, then blasts outward in
+      // a random direction, reaching off-screen before fading.
+      const burst = document.getElementById("burst");
+      const stage = document.getElementById("stage");
+      const burstEmojis = ["🌸", "🌺", "🌷", "🌹", "🌼", "💐", "🪷", "🌻", "💮", "🏵️"];
+      function spawnFlower(originX, originY, baseDelay) {
+        // outer div handles translation, inner span handles spin + bloom
+        const f = document.createElement("div");
+        f.className = "burst-flower";
+        const inner = document.createElement("span");
+        inner.className = "burst-flower-inner";
+        inner.textContent = burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
+        f.appendChild(inner);
+
+        // origin: card center (viewport px) — every flower starts here
+        f.style.left = originX + "px";
+        f.style.top  = originY + "px";
+
+        // size tuned for phone screens — not huge
+        const sizeRem = 1.2 + Math.random() * 1.3; // 1.2–2.5rem
+        inner.style.fontSize = sizeRem + "rem";
+
+        // VOLCANO eruption: 120° cone centered on straight-up. "Up" on
+        // screen is negative Y, so sin(angle) negative = flower goes up.
+        const upCone = (2 * Math.PI) / 3; // 120°
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * upCone;
+
+        // Compact plume sized for a phone (iPhone 15: 393×852). Flowers rise
+        // AROUND the card, not off into the viewport corners.
+        const burstDist = 110 + Math.random() * 180; // 110–290px
+        f.style.setProperty("--dx", (Math.cos(angle) * burstDist) + "px");
+        f.style.setProperty("--dy", (Math.sin(angle) * burstDist) + "px");
+
+        // Gravity: fall far enough to arc back past the card; bigger flowers
+        // fall more so the plume has visible weight to it. Shorter than
+        // before because the slower ease-in fall covers more ground visually.
+        const fall = 160 + Math.random() * 180 + sizeRem * 20; // ~190–380px
+        f.style.setProperty("--fall", fall + "px");
+
+        // continuous linear spin — not synced with motion
+        f.style.setProperty("--rot", (Math.random() * 540 - 270) + "deg");
+
+        // Longer lifespan: the fall phase now gets 60% of this (previously 50%)
+        // and uses ease-in, so flowers hang at the apex then drift down slowly.
+        const dur = 3.0 + Math.random() * 2.0 + (2.5 - sizeRem) * 0.15; // ~3.0–5.0s
+        f.style.setProperty("--dur", dur + "s");
+        f.style.setProperty("--delay", baseDelay + "s");
+
+        inner.addEventListener("animationend", () => f.remove(), { once: true });
+        burst.appendChild(f);
+      }
+      function burstFlowers() {
+        // skip entirely under reduced-motion — the SVG bouquet bloom is enough
+        if (reduceMotion) return;
+
+        // card center in viewport pixels (stage box stays put while the lid folds)
+        const rect = stage.getBoundingClientRect();
+        const cx = rect.left + rect.width  / 2;
+        const cy = rect.top  + rect.height / 2;
+
+        // First wave fires INSTANTLY and all at once — no stagger — so the
+        // bloom lands the millisecond the flip ends. Trailing waves give it
+        // sustain so the plume doesn't vanish in one frame.
+        const waves = [
+          { count: 40, spread: 0 },   // immediate: all together, zero delay
+          { count: 25, spread: 0.9 }, // mid wave
+          { count: 15, spread: 1.8 }, // trailing wave
         ];
-        const [c1, c2] = colors[Math.floor(Math.random() * colors.length)];
-        const r1 = 8 + Math.random() * 8;
-        const c = document.createElementNS(ns, "circle");
-        c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", r1); c.setAttribute("fill", c1);
-        const c3 = document.createElementNS(ns, "circle");
-        c3.setAttribute("cx", cx); c3.setAttribute("cy", cy); c3.setAttribute("r", r1 * 0.55); c3.setAttribute("fill", c2);
-        g.appendChild(c); g.appendChild(c3);
-        bouquet.appendChild(g);
-      });
+        let offset = 0;
+        for (const wave of waves) {
+          for (let i = 0; i < wave.count; i++) {
+            spawnFlower(cx, cy, offset + Math.random() * wave.spread);
+          }
+          offset += wave.spread * 0.55;
+        }
+      }
 
       // ---------- qualities carousel ----------
       const qualities = [
