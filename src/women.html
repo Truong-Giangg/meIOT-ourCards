@@ -153,7 +153,7 @@
         transform-origin: center bottom;
         backface-visibility: hidden;
         transform: rotateX(0deg);
-        transition: transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+        transition: transform 1400ms cubic-bezier(0.22, 1, 0.36, 1);
         will-change: transform;
       }
       .lid:focus-visible {
@@ -594,6 +594,14 @@
     </div>
 
     <script type="module">
+      // ---------- always open at the top on refresh ----------
+      // Browsers normally restore the previous scroll position after reload;
+      // for a greeting card, that breaks the "tap to open" moment. Opt out,
+      // and scroll to top synchronously before paint.
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+      window.addEventListener("load", () => window.scrollTo(0, 0));
+
       // ---------- fold-open lid ----------
       const lid = document.getElementById("lid");
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -620,7 +628,7 @@
         lid.addEventListener("transitionend", (e) => {
           if (e.propertyName === "transform") removeLid();
         }, { once: true });
-        setTimeout(removeLid, 1200);
+        setTimeout(removeLid, 1700);
       }
       lid.addEventListener("click", openCard);
       lid.addEventListener("keydown", (e) => {
