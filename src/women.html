@@ -616,19 +616,13 @@
         // Flowers erupt in the SAME frame as the flip starts — one gesture,
         // one moment: tap → card flips AND flowers bloom together.
         burstFlowers();
-        // Once the flip finishes, remove the lid entirely so the content
-        // below fills the space. transitionend is exact; the setTimeout is
-        // a safety net (reduced motion, cancelled transition, etc.).
-        let removed = false;
-        const removeLid = () => {
-          if (removed) return;
-          removed = true;
-          lid.classList.add("gone");
-        };
-        lid.addEventListener("transitionend", (e) => {
-          if (e.propertyName === "transform") removeLid();
-        }, { once: true });
-        setTimeout(removeLid, 1700);
+        // Remove the lid at the VISUAL end of the flip, not the transition's
+        // technical end. The ease-out curve shoots past 90° in the first
+        // ~400ms, so backface-visibility hides the lid long before the
+        // transition's 1400ms completes. Waiting for transitionend meant a
+        // visible gap of "lid invisible but still there." 900ms matches
+        // when the lid is deep past 90° and the fold reads as finished.
+        setTimeout(() => lid.classList.add("gone"), 900);
       }
       lid.addEventListener("click", openCard);
       lid.addEventListener("keydown", (e) => {
